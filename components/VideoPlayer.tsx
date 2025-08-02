@@ -82,7 +82,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         
         let finalStreamUrl = streamUrl;
         if (channel.needsProxy) {
-            finalStreamUrl = `https://corsproxy.io/?${streamUrl}`;
+            finalStreamUrl = `https://thingproxy.freeboard.io/fetch/${streamUrl}`;
         }
 
         if (finalStreamUrl.endsWith('.m3u8')) {
