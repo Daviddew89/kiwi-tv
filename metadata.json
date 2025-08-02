@@ -1,0 +1,6 @@
+{
+  "name": "Kiwi TV",
+  "description": "A web application to stream free-to-air TV channels.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
