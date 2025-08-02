@@ -69,25 +69,41 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         let hls: any;
         const playVideo = () => video.play().catch(e => console.error("Autoplay was prevented:", e));
 
-        if (streamUrl.endsWith('.m3u8')) {
+        const hlsConfig: any = {
+            enableWorker: true,
+            lowLatencyMode: true
+        };
+
+        if (channel.headers && channel.headers['x-forwarded-for']) {
+            hlsConfig.xhrSetup = (xhr: XMLHttpRequest, url: string) => {
+                xhr.setRequestHeader('x-forwarded-for', channel.headers['x-forwarded-for']);
+            };
+        }
+
+        let finalStreamUrl = streamUrl;
+        if (channel.needsProxy) {
+            finalStreamUrl = `https://corsproxy.io/?${streamUrl}`;
+        }
+
+        if (finalStreamUrl.endsWith('.m3u8')) {
             if (Hls.isSupported()) {
-                hls = new Hls({ enableWorker: true, lowLatencyMode: true });
-                hls.loadSource(streamUrl);
+                hls = new Hls(hlsConfig);
+                hls.loadSource(finalStreamUrl);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, playVideo);
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = streamUrl;
+                video.src = finalStreamUrl;
                 video.addEventListener('loadedmetadata', playVideo);
             }
         } else {
-            video.src = streamUrl;
+            video.src = finalStreamUrl;
             playVideo();
         }
 
         return () => {
             if (hls) hls.destroy();
         };
-    }, [streamUrl]);
+    }, [streamUrl, channel.headers, channel.needsProxy]);
 
     const showControls = useCallback(() => {
         setIsControlsVisible(true);
