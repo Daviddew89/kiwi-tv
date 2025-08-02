@@ -69,9 +69,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         let hls: any;
         const playVideo = () => video.play().catch(e => console.error("Autoplay was prevented:", e));
 
+        const hlsConfig: any = {
+            enableWorker: true,
+            lowLatencyMode: true
+        };
+
+        if (channel.headers && channel.headers['x-forwarded-for']) {
+            hlsConfig.xhrSetup = (xhr: XMLHttpRequest, url: string) => {
+                xhr.setRequestHeader('x-forwarded-for', channel.headers['x-forwarded-for']);
+            };
+        }
+
         if (streamUrl.endsWith('.m3u8')) {
             if (Hls.isSupported()) {
-                hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+                hls = new Hls(hlsConfig);
                 hls.loadSource(streamUrl);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, playVideo);
@@ -87,7 +98,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         return () => {
             if (hls) hls.destroy();
         };
-    }, [streamUrl]);
+    }, [streamUrl, channel.headers]);
 
     const showControls = useCallback(() => {
         setIsControlsVisible(true);
