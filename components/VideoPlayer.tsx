@@ -69,9 +69,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         let hls: any;
         const playVideo = () => video.play().catch(e => console.error("Autoplay was prevented:", e));
 
-        const hlsConfig: any = {
-            enableWorker: true,
-            lowLatencyMode: true
+        const hlsConfig: any = { 
+            enableWorker: true, 
+            lowLatencyMode: true 
         };
 
         if (channel.headers && channel.headers['x-forwarded-for']) {
@@ -79,7 +79,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
                 xhr.setRequestHeader('x-forwarded-for', channel.headers['x-forwarded-for']);
             };
         }
-
+        
         let finalStreamUrl = streamUrl;
         if (channel.needsProxy) {
             finalStreamUrl = `https://corsproxy.io/?${streamUrl}`;
