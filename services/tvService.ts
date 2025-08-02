@@ -195,6 +195,7 @@ export const fetchChannels = async (): Promise<Channel[]> => {
                             epg_id: channelData.epg_id,
                             network: channelData.network,
                             category: categorizeChannel(channelData),
+                            headers: channelData.headers,
                         };
                     }
                     return null;
