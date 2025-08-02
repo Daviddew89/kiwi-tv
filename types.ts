@@ -7,6 +7,7 @@ export interface Channel {
   epg_id: string;
   network?: string;
   category: 'New Zealand' | 'International' | 'Religious' | 'Sports' | 'News';
+  headers?: { [key: string]: string };
 }
 
 export interface Programme {
