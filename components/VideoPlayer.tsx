@@ -78,6 +78,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
 
     // HLS Logic
     useEffect(() => {
+        // --- Start of Debugging for Sky Open Channels ---
+        if (channel.name === 'Sky Open' || channel.name === 'Sky Open+1') {
+            console.log('[DEBUG] Channel data for:', channel.name, channel);
+        }
+        // --- End of Debugging for Sky Open Channels ---
+
         if (!videoRef.current) return;
         const video = videoRef.current;
         let hls: any;
