@@ -257,7 +257,7 @@ const App: React.FC = () => {
     const redOchreRGB: [number, number, number] = [169 / 255, 67 / 255, 50 / 255];
 
     return (
-        <div className="h-screen w-screen flex flex-col relative z-0 overflow-hidden bg-app-bg">
+        <div className="h-screen flex flex-col relative z-0 overflow-hidden bg-app-bg">
             <div className="fixed inset-0 z-[-1] overflow-hidden bg-app-bg">
                 <DarkVeil 
                     speed={0.3}
@@ -303,7 +303,6 @@ const App: React.FC = () => {
                             onChannelActivate={setActiveChannelId}
                             onChannelSelect={handleChannelSelect}
                         />
-                        <div className="flex-grow-[1]" /> {/* This spacer takes up the remaining 25% of the vertical space */}
                     </>
                 )}
                 

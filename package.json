@@ -12,7 +12,8 @@
     "@tailwindcss/postcss": "^4.1.11",
     "ogl": "1.0.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "tailwind-scrollbar": "^4.0.2"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

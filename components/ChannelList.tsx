@@ -98,56 +98,76 @@ const ChannelDeck: React.FC<ChannelDeckProps> = ({ channels, epg, activeChannelI
     }, [activeChannelId, channels, onChannelActivate]);
 
     return (
-        <div 
-            className="w-full flex-grow-[3] py-4 relative"
-            role="region"
-            aria-label="Channel selection deck. Use arrow keys or on-screen buttons to navigate channels, and press Enter to view details."
-            aria-activedescendant={activeChannelId ? `channel-card-${activeChannelId}` : undefined}
-        >
-            <button
-                onClick={() => handleArrowClick('prev')}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white/70 backdrop-blur-sm transition-all hover:bg-black/40 hover:text-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-red-ochre"
-                aria-label="Previous channel"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
+        <>
+            <style>{`
+                .channel-scroller::-webkit-scrollbar {
+                    height: 8px;
+                }
+                .channel-scroller::-webkit-scrollbar-track {
+                    background-color: rgba(255, 255, 255, 0.1);
+                    border-radius: 4px;
+                }
+                .channel-scroller::-webkit-scrollbar-thumb {
+                    background-color: #A94332; /* primary-red-ochre */
+                    border-radius: 4px;
+                }
+                .channel-scroller::-webkit-scrollbar-thumb:hover {
+                    background-color: #8e382a; /* A darker shade for hover */
+                }
 
-            <button
-                onClick={() => handleArrowClick('next')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white/70 backdrop-blur-sm transition-all hover:bg-black/40 hover:text-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-red-ochre"
-                aria-label="Next channel"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
-
+                /* For Firefox */
+                .channel-scroller {
+                    scrollbar-width: thin;
+                    scrollbar-color: #A94332 rgba(255, 255, 255, 0.1);
+                }
+            `}</style>
             <div 
-                ref={scrollerRef}
-                // The 'scrollbar-hide' class is used here. If it doesn't work, you may need to install
-                // the 'tailwind-scrollbar-hide' plugin or add this to your global CSS:
-                // .scrollbar-hide::-webkit-scrollbar { display: none; }
-                // .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-                className="absolute inset-0 flex items-center gap-4 md:gap-6 px-[50%] overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-hide"
-                aria-label="List of channels"
+                className="w-full h-full relative"
+                role="region"
+                aria-label="Channel selection deck. Use arrow keys or on-screen buttons to navigate channels, and press Enter to view details."
+                aria-activedescendant={activeChannelId ? `channel-card-${activeChannelId}` : undefined}
             >
-                {channels.map(channel => (
-                     <DeckChannelCard 
-                        key={channel.id}
-                        channel={channel}
-                        programmes={epg.get(channel.epg_id)}
-                        onSelect={() => onChannelSelect(channel.id)}
-                        isActive={channel.id === activeChannelId}
-                    />
-                ))}
+                <button
+                    onClick={() => handleArrowClick('prev')}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white/70 backdrop-blur-sm transition-all hover:bg-black/40 hover:text-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-red-ochre"
+                    aria-label="Previous channel"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+
+                <button
+                    onClick={() => handleArrowClick('next')}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white/70 backdrop-blur-sm transition-all hover:bg-black/40 hover:text-white hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-red-ochre"
+                    aria-label="Next channel"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                <div 
+                    ref={scrollerRef}
+                    className="h-full flex items-center gap-4 md:gap-6 px-[50%] overflow-x-auto overflow-y-hidden snap-x snap-mandatory pb-4 channel-scroller"
+                    aria-label="List of channels"
+                >
+                    {channels.map(channel => (
+                         <DeckChannelCard 
+                            key={channel.id}
+                            channel={channel}
+                            programmes={epg.get(channel.epg_id)}
+                            onSelect={() => onChannelSelect(channel.id)}
+                            isActive={channel.id === activeChannelId}
+                        />
+                    ))}
+                </div>
+                
+                {/* Gradient Overlays to fade out edges */}
+                <div className="absolute left-0 top-0 bottom-0 w-1/4 bg-gradient-to-r from-app-bg to-transparent pointer-events-none z-10"></div>
+                <div className="absolute right-0 top-0 bottom-0 w-1/4 bg-gradient-to-l from-app-bg to-transparent pointer-events-none z-10"></div>
             </div>
-            
-            {/* Gradient Overlays to fade out edges */}
-            <div className="absolute left-0 top-0 bottom-0 w-1/4 bg-gradient-to-r from-app-bg to-transparent pointer-events-none z-10"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-1/4 bg-gradient-to-l from-app-bg to-transparent pointer-events-none z-10"></div>
-        </div>
+        </>
     );
 };
 

@@ -5,5 +5,13 @@ module.exports = {
     "./App.tsx",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
-  plugins: [],
+  theme: {
+    extend: {
+      // ...existing code...
+    },
+  },
+  plugins: [
+    require('tailwind-scrollbar'),
+    // If you have other plugins, they would be here
+  ],
 };
