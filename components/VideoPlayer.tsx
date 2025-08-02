@@ -7,11 +7,12 @@ import CustomVideoControls from './CustomVideoControls';
 declare const Hls: any;
 
 // --- Start of Custom HLS.js Loader for Proxied Streams ---
-const PROXY_URL = 'https://corsproxy.io/?';
+const PROXY_URL = 'https://cors.eu.org/';
 
 class ProxiedHlsLoader extends Hls.DefaultConfig.loader {
     load(context: any, config: any, callbacks: any) {
-        const proxiedUrl = `${PROXY_URL}${context.url}`;
+        // Some proxies, like cors.eu.org, require the protocol to be stripped from the target URL.
+        const proxiedUrl = `${PROXY_URL}${context.url.replace(/^https?:\/\//, '')}`;
         // console.log(`[ProxiedHlsLoader] Loading: ${context.url} -> ${proxiedUrl}`);
         context.url = proxiedUrl;
         super.load(context, config, callbacks);
@@ -102,7 +103,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
             };
         }
 
-        const finalStreamUrl = channel.needsProxy ? `${PROXY_URL}${streamUrl}` : streamUrl;
+        const finalStreamUrl = channel.needsProxy ? `${PROXY_URL}${streamUrl.replace(/^https?:\/\//, '')}` : streamUrl;
 
         if (streamUrl.endsWith('.m3u8')) {
             if (Hls.isSupported()) {
