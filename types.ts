@@ -1,4 +1,3 @@
-
 export interface Channel {
   id: string;
   name: string;
@@ -8,6 +7,7 @@ export interface Channel {
   network?: string;
   category: 'New Zealand' | 'International' | 'Religious' | 'Sports' | 'News';
   headers?: { [key: string]: string };
+  needsProxy?: boolean;
 }
 
 export interface Programme {

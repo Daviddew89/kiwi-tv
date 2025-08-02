@@ -187,7 +187,7 @@ export const fetchChannels = async (): Promise<Channel[]> => {
                 .map(([id, channelData]: [string, any]): Channel | null => {
                     // Ensure all required properties exist before creating the channel object
                     if (channelData.name && channelData.logo && channelData.mjh_master && channelData.epg_id) {
-                        return {
+                        const channel: Channel = {
                             id: id,
                             name: channelData.name,
                             logo: channelData.logo,
@@ -197,6 +197,23 @@ export const fetchChannels = async (): Promise<Channel[]> => {
                             category: categorizeChannel(channelData),
                             headers: channelData.headers,
                         };
+
+                        // --- Start of Channel-Specific Fixes ---
+
+                        // Fix for Sky Open: Use direct URL to avoid redirect issues with headers.
+                        if (id === 'mjh-prime') {
+                            channel.url = 'https://primetv-prod.akamaized.net/v1/prime-freeview-aes128.m3u8';
+                        }
+
+                        // Fix for channels needing a CORS proxy
+                        const channelsNeedingProxy = ['mjh-maori-tv', 'mjh-te-reo'];
+                        if (channelsNeedingProxy.includes(id)) {
+                            channel.needsProxy = true;
+                        }
+
+                        // --- End of Channel-Specific Fixes ---
+
+                        return channel;
                     }
                     return null;
                 })
