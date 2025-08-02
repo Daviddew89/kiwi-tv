@@ -2,21 +2,103 @@ import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react'
 import { Channel, EpgData, Programme } from '../types';
 import { useProgramImage } from '../hooks/useShowImage';
 import CustomVideoControls from './CustomVideoControls';
+import { debugLogToTerminal, errorLogToTerminal } from '../utils/debug';
 
 // HLS.js is loaded from a script tag in index.html, so we declare it here.
 declare const Hls: any;
 
 // --- Start of Custom HLS.js Loader for Proxied Streams ---
-const PROXY_URL = 'https://cors.eu.org/';
+const PROXY_URLS = [
+    'https://corsproxy.io/?',
+    'https://cors.eu.org/',
+    'https://thingproxy.freeboard.io/fetch/',
+];
 
-class ProxiedHlsLoader extends Hls.DefaultConfig.loader {
-    load(context: any, config: any, callbacks: any) {
-        // Some proxies, like cors.eu.org, require the protocol to be stripped from the target URL.
-        const proxiedUrl = `${PROXY_URL}${context.url.replace(/^https?:\/\//, '')}`;
-        // console.log(`[ProxiedHlsLoader] Loading: ${context.url} -> ${proxiedUrl}`);
-        context.url = proxiedUrl;
-        super.load(context, config, callbacks);
+class ProxiedHlsLoader {
+    private channel: Channel;
+    private currentProxyIndex: number = 0;
+
+    constructor(channel: Channel) {
+        super();
+        this.channel = channel;
+        this.logDebug('ProxiedHlsLoader constructor called');
     }
+
+    private logDebug(message: string, data?: any) {
+        const logMessage = `[ProxiedHlsLoader:${this.channel.name}] ${message}`;
+        if (data !== undefined) {
+            console.log(logMessage, data);
+            debugLogToTerminal(logMessage, data);
+        } else {
+            console.log(logMessage);
+            debugLogToTerminal(logMessage);
+        }
+    }
+
+    private getProxiedUrl(originalUrl: string): string {
+        const proxy = PROXY_URLS[this.currentProxyIndex];
+        // Some proxies require the protocol to be stripped
+        const cleanUrl = originalUrl.replace(/^https?:\/\//, '');
+        return `${proxy}${cleanUrl}`;
+    }
+
+    load(context: any, config: any, callbacks: any) {
+        this.logDebug('=== PROXIED HLS LOADER START ===');
+        this.logDebug('Context:', context);
+        this.logDebug('Config:', config);
+
+        // Create a default loader instance
+        const defaultLoader = new Hls.DefaultConfig.loader();
+        
+        // Override the xhrSetup to proxy ALL requests (manifest, segments, keys)
+        const originalXhrSetup = config.xhrSetup;
+        config.xhrSetup = (xhr: XMLHttpRequest, url: string) => {
+            this.logDebug(`XHR Setup for URL: ${url}`);
+            
+            // Check if this URL needs to be proxied
+            // Proxy requests to the original domain AND to Akamai CDN (for Sky Open segments)
+            const originalDomain = this.channel.url.replace(/^https?:\/\//, '').split('/')[0];
+            const requestDomain = url.replace(/^https?:\/\//, '').split('/')[0];
+            
+            let finalUrl = url;
+            if (requestDomain === originalDomain || requestDomain === 'primetv-prod.akamaized.net') {
+                // This is a request to the original domain or Akamai CDN, proxy it
+                finalUrl = this.getProxiedUrl(url);
+                this.logDebug(`Proxying request: ${url} -> ${finalUrl}`);
+            } else {
+                this.logDebug(`Direct request (not proxied): ${url}`);
+            }
+            
+            // Apply channel headers
+            if (this.channel.headers) {
+                Object.entries(this.channel.headers).forEach(([key, value]) => {
+                    this.logDebug(`Setting header: ${key} = ${value}`);
+                    xhr.setRequestHeader(key, value);
+                });
+            }
+
+            // Call original xhrSetup if it exists
+            if (originalXhrSetup) {
+                originalXhrSetup(xhr, finalUrl);
+            }
+
+            // Add error handling for this specific request
+            xhr.addEventListener('error', (e) => {
+                this.logDebug(`XHR Error for ${url}:`, e);
+                this.handleLoadError(context, config, callbacks);
+            });
+
+            xhr.addEventListener('timeout', (e) => {
+                this.logDebug(`XHR Timeout for ${url}:`, e);
+                this.handleLoadError(context, config, callbacks);
+            });
+        };
+
+        // Use the default loader to handle the actual loading
+        defaultLoader.load(context, config, callbacks);
+    }
+
+
 }
 // --- End of Custom HLS.js Loader ---
 
@@ -45,12 +127,20 @@ interface VideoPlayerProps {
     onClose: () => void;
     channel: Channel;
     epg: EpgData;
+    onStreamStatusChange?: (status: {
+        isPlaying: boolean;
+        isBuffering: boolean;
+        error: string | null;
+        currentTime: number;
+        duration: number;
+    }) => void;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, epg }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, epg, onStreamStatusChange }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const playerContainerRef = useRef<HTMLDivElement>(null);
     const controlsTimeoutRef = useRef<number | null>(null);
+    const hlsInstanceRef = useRef<any>(null);
 
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(true);
@@ -61,6 +151,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isCastAvailable, setIsCastAvailable] = useState(false);
     const [isBuffering, setIsBuffering] = useState(true);
+    const [streamError, setStreamError] = useState<string | null>(null);
 
     const { currentProgramme, nextProgramme } = useMemo(() => {
         const programmes = epg.get(channel.epg_id);
@@ -76,57 +167,191 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
 
     const [showNextUp, setShowNextUp] = useState(false);
 
-    // HLS Logic
+    // Call onStreamStatusChange whenever stream status changes
     useEffect(() => {
-        // --- Start of Debugging for Sky Open Channels ---
-        if (channel.name === 'Sky Open' || channel.name === 'Sky Open+1') {
-            console.log('[DEBUG] Channel data for:', channel.name, channel);
+        if (onStreamStatusChange) {
+            onStreamStatusChange({
+                isPlaying,
+                isBuffering,
+                error: streamError,
+                currentTime,
+                duration
+            });
         }
-        // --- End of Debugging for Sky Open Channels ---
+    }, [isPlaying, isBuffering, streamError, currentTime, duration, onStreamStatusChange]);
 
-        if (!videoRef.current) return;
+    // Debug logging function
+    const logDebug = useCallback((message: string, data?: any) => {
+        const logMessage = `[VideoPlayer:${channel.name}] ${message}`;
+        if (data !== undefined) {
+            console.log(logMessage, data);
+            debugLogToTerminal(logMessage, data);
+        } else {
+            console.log(logMessage);
+            debugLogToTerminal(logMessage);
+        }
+    }, [channel.name]);
+
+    // HLS Logic with comprehensive debugging
+    useEffect(() => {
+        logDebug('=== STREAM INITIALIZATION START ===');
+        logDebug('Channel data:', {
+            id: channel.id,
+            name: channel.name,
+            url: channel.url,
+            epg_id: channel.epg_id,
+            needsProxy: channel.needsProxy,
+            headers: channel.headers
+        });
+        logDebug('Stream URL:', streamUrl);
+        logDebug('Stream type:', streamUrl.endsWith('.m3u8') ? 'HLS' : 'Direct');
+
+        if (!videoRef.current) {
+            logDebug('ERROR: Video element not available');
+            return;
+        }
+
         const video = videoRef.current;
         let hls: any;
-        const playVideo = () => video.play().catch(e => console.error("Autoplay was prevented:", e));
+
+        const playVideo = () => {
+            logDebug('Attempting to play video...');
+            video.play().catch(e => {
+                const errorMsg = `Autoplay was prevented: ${e.message}`;
+                logDebug('ERROR: ' + errorMsg, e);
+                errorLogToTerminal('Autoplay failed', e);
+                setStreamError(errorMsg);
+            });
+        };
 
         const hlsConfig: any = { 
             enableWorker: true, 
-            lowLatencyMode: true 
+            lowLatencyMode: true,
+            debug: true // Enable HLS.js internal debugging
         };
 
+        logDebug('HLS configuration:', hlsConfig);
+
         if (channel.needsProxy) {
-            hlsConfig.fLoader = ProxiedHlsLoader;
+            logDebug('Using proxied HLS loader');
+            const proxiedLoader = new ProxiedHlsLoader(channel);
+            logDebug('ProxiedHlsLoader created:', proxiedLoader);
+            hlsConfig.loader = proxiedLoader;
         } else if (channel.headers && channel.headers['x-forwarded-for']) {
-            // Only set xhrSetup for non-proxied channels that need it.
+            logDebug('Setting up custom headers for non-proxied channel');
             hlsConfig.xhrSetup = (xhr: XMLHttpRequest, url: string) => {
+                logDebug('Setting x-forwarded-for header:', channel.headers['x-forwarded-for']);
                 xhr.setRequestHeader('x-forwarded-for', channel.headers['x-forwarded-for']);
             };
         }
 
-        const finalStreamUrl = channel.needsProxy ? `${PROXY_URL}${streamUrl.replace(/^https?:\/\//, '')}` : streamUrl;
+        const finalStreamUrl = streamUrl; // ProxiedHlsLoader will handle proxying internally
+        logDebug('Final stream URL:', finalStreamUrl);
 
         if (streamUrl.endsWith('.m3u8')) {
+            logDebug('Processing HLS stream...');
+            
             if (Hls.isSupported()) {
+                logDebug('HLS.js is supported, creating HLS instance');
                 hls = new Hls(hlsConfig);
-                // The custom loader will handle proxying, so we load the original URL.
+                hlsInstanceRef.current = hls;
+
+                // Comprehensive HLS event logging
+                const hlsEvents = [
+                    'MEDIA_ATTACHED',
+                    'MANIFEST_PARSED',
+                    'LEVEL_LOADED',
+                    'LEVEL_SWITCHED',
+                    'FRAG_LOADED',
+                    'FRAG_PARSED',
+                    'ERROR',
+                    'STALLED',
+                    'FRAG_LOAD_ERROR',
+                    'KEY_LOAD_ERROR',
+                    'MANIFEST_LOAD_ERROR'
+                ];
+
+                hlsEvents.forEach(event => {
+                    hls.on(Hls.Events[event], (eventType: string, data: any) => {
+                        logDebug(`HLS Event [${event}]:`, { eventType, data });
+                        
+                        if (event === 'ERROR') {
+                            logDebug('HLS ERROR DETAILS:', {
+                                type: data.type,
+                                details: data.details,
+                                fatal: data.fatal,
+                                url: data.url
+                            });
+                            setStreamError(`HLS Error: ${data.details} (${data.type})`);
+                        }
+                    });
+                });
+
+                logDebug('Loading HLS source:', streamUrl);
                 hls.loadSource(streamUrl);
                 hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, playVideo);
+                
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    logDebug('HLS manifest parsed successfully, starting playback');
+                    setStreamError(null);
+                    playVideo();
+                });
+
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // For native HLS, we need to provide the proxied URL directly if needed.
+                logDebug('Using native HLS support');
                 video.src = finalStreamUrl;
-                video.addEventListener('loadedmetadata', playVideo);
+                video.addEventListener('loadedmetadata', () => {
+                    logDebug('Native HLS metadata loaded, starting playback');
+                    setStreamError(null);
+                    playVideo();
+                });
+            } else {
+                logDebug('ERROR: HLS not supported by browser');
+                setStreamError('HLS streaming not supported by this browser');
             }
         } else {
-            // For other stream types, use the (potentially proxied) URL.
+            logDebug('Processing direct stream...');
             video.src = finalStreamUrl;
-            playVideo();
+            video.addEventListener('loadedmetadata', () => {
+                logDebug('Direct stream metadata loaded, starting playback');
+                setStreamError(null);
+                playVideo();
+            });
         }
 
-        return () => {
-            if (hls) hls.destroy();
+        // Video element error handling
+        const handleVideoError = (e: Event) => {
+            const video = e.target as HTMLVideoElement;
+            const errorData = {
+                error: video.error,
+                networkState: video.networkState,
+                readyState: video.readyState,
+                src: video.src
+            };
+            logDebug('Video element error:', errorData);
+            errorLogToTerminal('Video element error', errorData);
+            
+            if (video.error) {
+                const errorMessage = `Video Error: ${video.error.message} (Code: ${video.error.code})`;
+                logDebug(errorMessage);
+                errorLogToTerminal(errorMessage);
+                setStreamError(errorMessage);
+            }
         };
-    }, [streamUrl, channel.headers, channel.needsProxy]);
+
+        video.addEventListener('error', handleVideoError);
+
+        return () => {
+            logDebug('Cleaning up stream...');
+            if (hls) {
+                logDebug('Destroying HLS instance');
+                hls.destroy();
+                hlsInstanceRef.current = null;
+            }
+            video.removeEventListener('error', handleVideoError);
+            setStreamError(null);
+        };
+    }, [streamUrl, channel.headers, channel.needsProxy, logDebug]);
 
     const showControls = useCallback(() => {
         setIsControlsVisible(true);
@@ -136,17 +361,48 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         }, 3000);
     }, [isPlaying]);
 
-    // Player event listeners
+    // Player event listeners with debugging
     useEffect(() => {
         const video = videoRef.current;
         const container = playerContainerRef.current;
         if (!video || !container) return;
 
-        const updatePlayState = () => setIsPlaying(!video.paused);
+        const updatePlayState = () => {
+            const newState = !video.paused;
+            logDebug(`Play state changed: ${newState ? 'playing' : 'paused'}`);
+            setIsPlaying(newState);
+        };
+        
         const updateTime = () => setCurrentTime(video.currentTime);
-        const updateDuration = () => setDuration(video.duration);
-        const handleWaiting = () => setIsBuffering(true);
-        const handlePlaying = () => setIsBuffering(false);
+        const updateDuration = () => {
+            logDebug(`Duration updated: ${video.duration}s`);
+            setDuration(video.duration);
+        };
+        
+        const handleWaiting = () => {
+            logDebug('Video waiting for data');
+            setIsBuffering(true);
+        };
+        
+        const handlePlaying = () => {
+            logDebug('Video playing');
+            setIsBuffering(false);
+        };
+
+        const handleCanPlay = () => {
+            logDebug('Video can start playing');
+            setIsBuffering(false);
+        };
+
+        const handleLoadStart = () => {
+            logDebug('Video load started');
+            setIsBuffering(true);
+        };
+
+        const handleLoadedData = () => {
+            logDebug('Video data loaded');
+            setIsBuffering(false);
+        };
 
         video.addEventListener('play', updatePlayState);
         video.addEventListener('pause', updatePlayState);
@@ -154,6 +410,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         video.addEventListener('durationchange', updateDuration);
         video.addEventListener('waiting', handleWaiting);
         video.addEventListener('playing', handlePlaying);
+        video.addEventListener('canplay', handleCanPlay);
+        video.addEventListener('loadstart', handleLoadStart);
+        video.addEventListener('loadeddata', handleLoadedData);
         
         container.addEventListener('mousemove', showControls);
         showControls();
@@ -165,10 +424,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
             video.removeEventListener('durationchange', updateDuration);
             video.removeEventListener('waiting', handleWaiting);
             video.removeEventListener('playing', handlePlaying);
+            video.removeEventListener('canplay', handleCanPlay);
+            video.removeEventListener('loadstart', handleLoadStart);
+            video.removeEventListener('loadeddata', handleLoadedData);
             container.removeEventListener('mousemove', showControls);
             if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
         };
-    }, [showControls]);
+    }, [showControls, logDebug]);
 
     // Fullscreen and Cast API listeners
     useEffect(() => {
@@ -232,6 +494,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         checkTime();
         return () => clearInterval(intervalId);
     }, [currentProgramme, nextProgramme]);
+
+    // Stream status reporting
+    useEffect(() => {
+        if (onStreamStatusChange) {
+            onStreamStatusChange({
+                isPlaying,
+                isBuffering,
+                error: streamError,
+                currentTime,
+                duration
+            });
+        }
+    }, [isPlaying, isBuffering, streamError, currentTime, duration, onStreamStatusChange]);
     
     const handlePlayPause = () => videoRef.current?.paused ? videoRef.current?.play() : videoRef.current?.pause();
     const handleMuteToggle = () => { if(videoRef.current) videoRef.current.muted = !videoRef.current.muted; setIsMuted(m => !m); };
@@ -273,6 +548,26 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
             {isBuffering && isPlaying && (
                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none">
                     <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white/80"></div>
+                </div>
+            )}
+
+            {streamError && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/80 pointer-events-none">
+                    <div className="bg-red-900/80 border border-red-500 text-white p-6 rounded-lg max-w-md text-center">
+                        <h3 className="text-lg font-bold mb-2">Stream Error</h3>
+                        <p className="text-sm mb-4">{streamError}</p>
+                        <button 
+                            onClick={() => {
+                                logDebug('User requested stream retry');
+                                setStreamError(null);
+                                // Force re-initialization by updating a dependency
+                                window.location.reload();
+                            }}
+                            className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-sm font-semibold"
+                        >
+                            Retry Stream
+                        </button>
+                    </div>
                 </div>
             )}
             
