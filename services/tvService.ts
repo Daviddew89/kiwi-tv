@@ -203,6 +203,9 @@ export const fetchChannels = async (): Promise<Channel[]> => {
                         // Fix for Sky Open: Use direct URL to avoid redirect issues with headers.
                         if (id === 'mjh-prime') {
                             channel.url = 'https://primetv-prod.akamaized.net/v1/prime-freeview-aes128.m3u8';
+                            // This channel's data includes an 'x-forwarded-for' header that causes CORS errors with the direct Akamai link.
+                            // By deleting the headers, we prevent the VideoPlayer component from adding them to the request.
+                            delete channel.headers;
                         }
 
                         // Fix for channels needing a CORS proxy
