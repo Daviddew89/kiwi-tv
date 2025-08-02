@@ -200,13 +200,10 @@ export const fetchChannels = async (): Promise<Channel[]> => {
 
                         // --- Start of Channel-Specific Fixes ---
 
-                        // Fix for Sky Open: Use direct URL to avoid redirect issues with headers.
-                        if (id === 'mjh-prime') {
-                            channel.url = 'https://primetv-prod.akamaized.net/v1/prime-freeview-aes128.m3u8';
-                        }
-
-                        // Fix for channels needing a CORS proxy
-                        const channelsNeedingProxy = ['mjh-maori-tv', 'mjh-te-reo'];
+                        // Fix for channels needing a CORS proxy.
+                        // This includes channels that don't have CORS headers and channels that have them but also require
+                        // CORS for sub-requests (like fetching encryption keys), such as Sky Open.
+                        const channelsNeedingProxy = ['mjh-maori-tv', 'mjh-te-reo', 'mjh-prime'];
                         if (channelsNeedingProxy.includes(id)) {
                             channel.needsProxy = true;
                         }

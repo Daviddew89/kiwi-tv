@@ -6,6 +6,20 @@ import CustomVideoControls from './CustomVideoControls';
 // HLS.js is loaded from a script tag in index.html, so we declare it here.
 declare const Hls: any;
 
+// --- Start of Custom HLS.js Loader for Proxied Streams ---
+const PROXY_URL = 'https://cors.eu.org/';
+
+class ProxiedHlsLoader extends Hls.DefaultConfig.loader {
+    load(context: any, config: any, callbacks: any) {
+        // Some proxies, like cors.eu.org, require the protocol to be stripped from the target URL.
+        const proxiedUrl = `${PROXY_URL}${context.url.replace(/^https?:\/\//, '')}`;
+        // console.log(`[ProxiedHlsLoader] Loading: ${context.url} -> ${proxiedUrl}`);
+        context.url = proxiedUrl;
+        super.load(context, config, callbacks);
+    }
+}
+// --- End of Custom HLS.js Loader ---
+
 const findCurrentProgrammeIndex = (programmes: Programme[] | undefined): number => {
     if (!programmes || programmes.length === 0) return -1;
     const now = new Date();
@@ -74,28 +88,31 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
             lowLatencyMode: true 
         };
 
-        if (channel.headers && channel.headers['x-forwarded-for']) {
+        if (channel.needsProxy) {
+            hlsConfig.fLoader = ProxiedHlsLoader;
+        } else if (channel.headers && channel.headers['x-forwarded-for']) {
+            // Only set xhrSetup for non-proxied channels that need it.
             hlsConfig.xhrSetup = (xhr: XMLHttpRequest, url: string) => {
                 xhr.setRequestHeader('x-forwarded-for', channel.headers['x-forwarded-for']);
             };
         }
-        
-        let finalStreamUrl = streamUrl;
-        if (channel.needsProxy) {
-            finalStreamUrl = `https://corsproxy.io/?${streamUrl}`;
-        }
 
-        if (finalStreamUrl.endsWith('.m3u8')) {
+        const finalStreamUrl = channel.needsProxy ? `${PROXY_URL}${streamUrl.replace(/^https?:\/\//, '')}` : streamUrl;
+
+        if (streamUrl.endsWith('.m3u8')) {
             if (Hls.isSupported()) {
                 hls = new Hls(hlsConfig);
-                hls.loadSource(finalStreamUrl);
+                // The custom loader will handle proxying, so we load the original URL.
+                hls.loadSource(streamUrl);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, playVideo);
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // For native HLS, we need to provide the proxied URL directly if needed.
                 video.src = finalStreamUrl;
                 video.addEventListener('loadedmetadata', playVideo);
             }
         } else {
+            // For other stream types, use the (potentially proxied) URL.
             video.src = finalStreamUrl;
             playVideo();
         }
