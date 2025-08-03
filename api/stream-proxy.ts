@@ -11,13 +11,9 @@ export default async function (request: VercelRequest, response: VercelResponse)
         const targetUrl = decodeURIComponent(url);
         const fetchHeaders: HeadersInit = {};
 
-        // Pass through relevant headers from the client request
-        // For example, if you need to forward x-forwarded-for or other custom headers
         if (headers['x-forwarded-for'] && typeof headers['x-forwarded-for'] === 'string') {
             fetchHeaders['X-Forwarded-For'] = headers['x-forwarded-for'];
         }
-        // Add other headers as needed, e.g., Referer, User-Agent if they are critical and safe to forward
-        // Note: Be cautious about forwarding all headers, especially sensitive ones.
 
         const streamResponse = await fetch(targetUrl, {
             headers: fetchHeaders,
@@ -27,30 +23,51 @@ export default async function (request: VercelRequest, response: VercelResponse)
             return response.status(streamResponse.status).send(streamResponse.statusText);
         }
 
-        // Set CORS headers
-        response.setHeader('Access-Control-Allow-Origin', '*'); // Allow all origins for now, refine later if needed
+        response.setHeader('Access-Control-Allow-Origin', '*');
         response.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
-        response.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Range, X-Forwarded-For'); // Add any custom headers your client sends
-        response.setHeader('Access-Control-Expose-Headers', 'Content-Length, Content-Range'); // Expose headers needed by HLS.js
+        response.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Range, X-Forwarded-For');
+        response.setHeader('Access-Control-Expose-Headers', 'Content-Length, Content-Range');
 
-        // Copy content type and other relevant headers from the original response
-        streamResponse.headers.forEach((value, name) => {
-            // Avoid overwriting CORS headers we just set
-            if (!name.startsWith('access-control-')) {
-                response.setHeader(name, value);
-            }
-        });
+        const contentType = streamResponse.headers.get('content-type') || '';
 
-        // Stream the response body
-        if (streamResponse.body) {
-            const reader = streamResponse.body.getReader();
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                response.write(value);
+        // If it's an HLS manifest, we need to rewrite the URLs
+        if (contentType.includes('application/vnd.apple.mpegurl') || contentType.includes('application/x-mpegurl')) {
+            const manifestText = await streamResponse.text();
+            const baseUrl = new URL(targetUrl);
+            const manifestBaseUrl = new URL('.', baseUrl).href;
+
+            const rewrittenManifest = manifestText.split('\n').map(line => {
+                if (line.trim().length > 0 && !line.startsWith('#') && !line.startsWith('http')) {
+                    return new URL(line, manifestBaseUrl).href;
+                }
+                return line;
+            }).join('\n');
+
+            streamResponse.headers.forEach((value, name) => {
+                if (!name.startsWith('access-control-')) {
+                    response.setHeader(name, value);
+                }
+            });
+
+            response.send(rewrittenManifest);
+        } else {
+            // For non-manifest files, just stream the body directly
+            streamResponse.headers.forEach((value, name) => {
+                if (!name.startsWith('access-control-')) {
+                    response.setHeader(name, value);
+                }
+            });
+
+            if (streamResponse.body) {
+                const reader = streamResponse.body.getReader();
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    response.write(value);
+                }
             }
+            response.end();
         }
-        response.end();
 
     } catch (error: any) {
         console.error('Proxy error:', error);
