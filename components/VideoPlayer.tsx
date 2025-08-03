@@ -76,6 +76,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
             text-align: center;
             font-size: 1.5rem;
             line-height: 1.4;
+            width: 100%;
         }
         `;
         document.head.appendChild(style);
