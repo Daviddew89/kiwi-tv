@@ -30,19 +30,25 @@ export default async function (request: VercelRequest, response: VercelResponse)
 
         const contentType = streamResponse.headers.get('content-type') || '';
 
-        // If it's an HLS manifest, we need to rewrite the URLs
         if (contentType.includes('application/vnd.apple.mpegurl') || contentType.includes('application/x-mpegurl')) {
             const manifestText = await streamResponse.text();
-            const baseUrl = new URL(targetUrl);
-            const manifestBaseUrl = new URL('.', baseUrl).href;
+            const manifestBaseUrl = new URL('.', targetUrl).href;
 
             const rewrittenManifest = manifestText.split('\n').map(line => {
-                if (line.trim().length > 0 && !line.startsWith('#') && !line.startsWith('http')) {
-                    return new URL(line, manifestBaseUrl).href;
+                const trimmedLine = line.trim();
+                if (trimmedLine.length > 0 && !trimmedLine.startsWith('#')) {
+                    if (trimmedLine.startsWith('http')) {
+                        // This is already an absolute URL, but we should proxy it anyway to be safe
+                        return `/api/stream-proxy?url=${encodeURIComponent(trimmedLine)}`;
+                    } else {
+                        // This is a relative URL, so we make it absolute and then proxy it
+                        const absoluteUrl = new URL(trimmedLine, manifestBaseUrl).href;
+                        return `/api/stream-proxy?url=${encodeURIComponent(absoluteUrl)}`;
+                    }
                 }
                 return line;
             }).join('\n');
-
+            
             streamResponse.headers.forEach((value, name) => {
                 if (!name.startsWith('access-control-')) {
                     response.setHeader(name, value);
@@ -51,7 +57,6 @@ export default async function (request: VercelRequest, response: VercelResponse)
 
             response.send(rewrittenManifest);
         } else {
-            // For non-manifest files, just stream the body directly
             streamResponse.headers.forEach((value, name) => {
                 if (!name.startsWith('access-control-')) {
                     response.setHeader(name, value);
