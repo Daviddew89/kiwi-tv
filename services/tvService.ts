@@ -231,14 +231,8 @@ export const fetchChannels = async (): Promise<Channel[]> => {
 
                             // --- Start of Channel-Specific Fixes ---
 
-                            // Fix for channels needing a CORS proxy.
-                            // This includes channels that don't have CORS headers and channels that have them but also require
-                            // CORS for sub-requests (like fetching encryption keys), such as Sky Open.
-                            const channelsNeedingProxy = ['mjh-maori-tv', 'mjh-te-reo', 'mjh-prime'];
-                            if (channelsNeedingProxy.includes(id)) {
-                                channel.needsProxy = true;
-                                logDebug(`Channel ${channelData.name} (${id}) marked as needing proxy`);
-                            }
+                            // All channels are now proxied to fix CORS redirect issues.
+                            channel.needsProxy = true;
                             
                             // Remove referer header if it's just a space, as it can cause issues
                             if (channel.headers && channel.headers.referer === ' ') {
@@ -250,20 +244,6 @@ export const fetchChannels = async (): Promise<Channel[]> => {
                             if (channel.headers && channel.headers['user-agent'] === 'otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56') {
                                 delete channel.headers['user-agent'];
                                 logDebug(`Removed Apple TV user-agent header for channel ${channelData.name} (${id})`);
-                            }
-
-                            // Remove specific user-agent header if it's the Apple TV one, as it can cause issues
-                            if (channel.headers && channel.headers['user-agent'] === 'otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56') {
-                                delete channel.headers['user-agent'];
-                                logDebug(`Removed Apple TV user-agent header for channel ${channelData.name} (${id})`);
-                            }
-                            
-                            // Additional check for channels that use the prime stream URL
-                            // Note: prime-plus1.m3u8 streams have proper CORS headers and don't need proxying
-                            // prime.m3u8 streams need proxy due to CORS issues
-                            if (channelData.mjh_master && channelData.mjh_master.includes('prime.m3u8')) {
-                                channel.needsProxy = true;
-                                logDebug(`Channel ${channelData.name} (${id}) marked as needing proxy (uses prime stream)`);
                             }
 
                             // --- End of Channel-Specific Fixes ---
