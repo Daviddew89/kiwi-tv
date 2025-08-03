@@ -48,7 +48,7 @@ export default async function (request: VercelRequest, response: VercelResponse)
                 }
                 return line;
             }).join('\n');
-
+            
             streamResponse.headers.forEach((value, name) => {
                 if (!name.startsWith('access-control-')) {
                     response.setHeader(name, value);
