@@ -13,7 +13,7 @@ const AppHeader: React.FC<{
     scheduleButtonRef: React.RefObject<HTMLButtonElement>;
 }> = ({ onOpenSchedule, currentShowTitle, scheduleButtonRef }) => (
     <header className="fixed top-0 left-0 right-0 z-20 h-20 flex items-center justify-between px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black/50 to-transparent pointer-events-none">
-        <h1 className="text-2xl font-bold text-white drop-shadow-lg pointer-events-auto">Free<span className="text-primary-red-ochre">TV</span></h1>
+        <h1 className="text-2xl font-bold text-white drop-shadow-lg pointer-events-auto">Kiwi<span className="text-primary-red-ochre">TV</span></h1>
 
         <div className="flex items-center gap-4 pointer-events-auto">
             <button
