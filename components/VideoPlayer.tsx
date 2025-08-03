@@ -69,12 +69,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         style.id = styleId;
         style.innerHTML = `
         video::cue {
-            position: absolute;
             bottom: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: auto;
-            max-width: 90%;
             padding: 0.5em 1em;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 4px;
