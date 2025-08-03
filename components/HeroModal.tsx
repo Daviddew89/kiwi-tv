@@ -196,7 +196,7 @@ const ExpandedDetail: React.FC<ExpandedDetailProps> = ({ config, onClose, onPlay
                                         <InfoTag icon={<span className="material-symbols-outlined">surround_sound</span>} label={programme.audio.charAt(0).toUpperCase() + programme.audio.slice(1)} title="Audio Format" />
                                     )}
                                     {programme.subtitles && (
-                                        <InfoTag icon={<span className="material-symbols-outlined">subtitles</span>} label={programme.subtitles} title="Subtitles Available" />
+                                        <InfoTag icon={<span className="material-symbols-outlined">subtitles</span>} label="Available" title="Subtitles Available" />
                                     )}
                                 </div>
                                 

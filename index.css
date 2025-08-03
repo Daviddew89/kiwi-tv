@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&display=swap');
 
 @theme {
   --color-primary-red-ochre: #A94332;
@@ -40,7 +41,7 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Crimson Pro', serif;
     @apply bg-app-bg text-app-text overflow-hidden;
 }
 

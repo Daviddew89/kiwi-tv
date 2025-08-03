@@ -6,34 +6,16 @@ import ExpandedDetail from './components/HeroModal';
 import VideoPlayer from './components/VideoPlayer';
 import ScheduleModal from './components/ScheduleModal';
 import DarkVeil from './components/DarkVeil';
-import DebugPanel from './components/DebugPanel';
+
 
 const AppHeader: React.FC<{ 
     onOpenSchedule: () => void;
     scheduleButtonRef: React.RefObject<HTMLButtonElement>;
-    onToggleDebug: () => void;
-    isDebugVisible: boolean;
-}> = ({ onOpenSchedule, currentShowTitle, scheduleButtonRef, onToggleDebug, isDebugVisible }) => (
+}> = ({ onOpenSchedule, currentShowTitle, scheduleButtonRef }) => (
     <header className="fixed top-0 left-0 right-0 z-20 h-20 flex items-center justify-between px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black/50 to-transparent pointer-events-none">
         <h1 className="text-2xl font-bold text-white drop-shadow-lg pointer-events-auto">Free<span className="text-primary-red-ochre">TV</span></h1>
 
         <div className="flex items-center gap-4 pointer-events-auto">
-            <button
-                onClick={onToggleDebug}
-                className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all text-xs font-semibold ${
-                    isDebugVisible 
-                        ? 'bg-primary-red-ochre text-white' 
-                        : 'bg-app-surface backdrop-blur-sm border border-app-outline text-app-on-surface hover:border-primary-red-ochre'
-                }`}
-                title="Toggle Debug Panel"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Debug
-            </button>
-
             <button
                 ref={scheduleButtonRef}
                 onClick={onOpenSchedule}
@@ -54,6 +36,17 @@ const App: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    useEffect(() => {
+        const link = document.createElement('link');
+        link.href = 'https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&display=swap';
+        link.rel = 'stylesheet';
+        document.head.appendChild(link);
+
+        return () => {
+            document.head.removeChild(link);
+        };
+    }, []);
+
     const [activeChannelId, setActiveChannelId] = useState<string | null>(null);
     const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null);
     const [playingChannel, setPlayingChannel] = useState<Channel | null>(null);
@@ -65,7 +58,7 @@ const App: React.FC = () => {
     }>({ isOpen: false, channelContext: null });
 
     const [focusLocation, setFocusLocation] = useState<'deck' | 'header'>('deck');
-    const [isDebugVisible, setIsDebugVisible] = useState(false);
+    
     const scheduleButtonRef = useRef<HTMLButtonElement>(null);
     const keyPressCooldown = useRef(false);
 
@@ -87,7 +80,7 @@ const App: React.FC = () => {
 
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-            console.error(err);
+            
         } finally {
             setLoading(false);
         }
@@ -149,13 +142,7 @@ const App: React.FC = () => {
     }, []);
     
     const handlePlay = (url: string) => {
-        console.log(`[${new Date().toISOString()}] [App] Stream initiated:`, {
-            channel: detailData?.channel?.name,
-            channelId: detailData?.channel?.id,
-            streamUrl: url,
-            context: detailData?.context,
-            programme: detailData?.programme?.title
-        });
+        
         
         if (detailData?.context === 'live') {
             setPlayingChannel(detailData.channel);
@@ -312,8 +299,7 @@ const App: React.FC = () => {
                 scheduleButtonRef={scheduleButtonRef}
                 onOpenSchedule={() => handleOpenSchedule()} 
                 currentShowTitle={activeProgramme?.title || null} 
-                onToggleDebug={() => setIsDebugVisible(!isDebugVisible)}
-                isDebugVisible={isDebugVisible}
+                
             />
 
             <main className="flex-grow flex flex-col relative overflow-hidden pt-20">
@@ -373,12 +359,7 @@ const App: React.FC = () => {
                 onProgrammeSelect={handleProgrammeSelect}
             />
             
-            <DebugPanel 
-                isVisible={isDebugVisible}
-                onToggle={() => setIsDebugVisible(!isDebugVisible)}
-                currentChannel={playingChannel}
-                streamStatus={streamStatus}
-            />
+            
         </div>
     );
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react'
 import { Channel, EpgData, Programme } from '../types';
 import { useProgramImage } from '../hooks/useShowImage';
 import CustomVideoControls from './CustomVideoControls';
-import { debugLogToTerminal, errorLogToTerminal } from '../utils/debug';
+
 
 // HLS.js is loaded from a script tag in index.html, so we declare it here.
 declare const Hls: any;
@@ -59,6 +59,39 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
     const [isCastAvailable, setIsCastAvailable] = useState(false);
     const [isBuffering, setIsBuffering] = useState(true);
     const [streamError, setStreamError] = useState<string | null>(null);
+    const [subtitlesEnabled, setSubtitlesEnabled] = useState(false);
+
+    useEffect(() => {
+        const styleId = 'custom-subtitle-styles';
+        if (document.getElementById(styleId)) return;
+
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.innerHTML = `
+        video::cue {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: auto;
+            max-width: 90%;
+            padding: 0.5em 1em;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 4px;
+            text-align: center;
+            font-size: 1.5rem;
+            line-height: 1.4;
+        }
+        `;
+        document.head.appendChild(style);
+
+        return () => {
+            const styleElement = document.getElementById(styleId);
+            if (styleElement) {
+                document.head.removeChild(styleElement);
+            }
+        };
+    }, []);
 
     const { currentProgramme, nextProgramme } = useMemo(() => {
         const programmes = epg.get(channel.epg_id);
@@ -87,34 +120,21 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         }
     }, [isPlaying, isBuffering, streamError, currentTime, duration, onStreamStatusChange]);
 
-    // Debug logging function
-    const logDebug = useCallback((message: string, data?: any) => {
-        const logMessage = `[VideoPlayer:${channel.name}] ${message}`;
-        if (data !== undefined) {
-            console.log(logMessage, data);
-            debugLogToTerminal(logMessage, data);
-        } else {
-            console.log(logMessage);
-            debugLogToTerminal(logMessage);
-        }
-    }, [channel.name]);
+    
+
+    const handleToggleSubtitles = useCallback(() => {
+        setSubtitlesEnabled(prev => !prev);
+    }, []);
 
     // HLS Logic with comprehensive debugging
     useEffect(() => {
-        logDebug('=== STREAM INITIALIZATION START ===');
-        logDebug('Channel data:', {
-            id: channel.id,
-            name: channel.name,
-            url: channel.url,
-            epg_id: channel.epg_id,
-            needsProxy: channel.needsProxy,
-            headers: channel.headers
-        });
-        logDebug('Stream URL:', streamUrl);
-        logDebug('Stream type:', streamUrl.endsWith('.m3u8') ? 'HLS' : 'Direct');
+        
+        
+        
+        
 
         if (!videoRef.current) {
-            logDebug('ERROR: Video element not available');
+            
             return;
         }
 
@@ -122,11 +142,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         let hls: any;
 
         const playVideo = () => {
-            logDebug('Attempting to play video...');
             video.play().catch(e => {
-                const errorMsg = `Autoplay was prevented: ${e.message}`;
-                logDebug('ERROR: ' + errorMsg, e);
-                errorLogToTerminal('Autoplay failed', e);
+                const errorMsg = `Autoplay was prevented: ${e instanceof Error ? e.message : String(e)}`;
                 setStreamError(errorMsg);
             });
         };
@@ -134,26 +151,25 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         const hlsConfig: any = { 
             enableWorker: true, 
             lowLatencyMode: true,
-            debug: true // Enable HLS.js internal debugging
         };
 
-        logDebug('HLS configuration:', hlsConfig);
+        
 
         if (channel.headers && Object.keys(channel.headers).length > 0) {
-            logDebug('Setting up custom headers for channel');
+            
             hlsConfig.xhrSetup = (xhr: XMLHttpRequest, url: string) => {
                 Object.entries(channel.headers).forEach(([key, value]) => {
                     // Skip setting problematic headers
                     if (key.toLowerCase() === 'referer' && value === ' ') {
-                        logDebug(`Skipping problematic referer header`);
+                        
                         return;
                     }
                     if (key.toLowerCase() === 'user-agent' && value === 'otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56') {
-                        logDebug(`Skipping problematic user-agent header`);
+                        
                         return;
                     }
-                    logDebug(`Setting header: ${key} = ${value}`);
-                    xhr.setRequestHeader(key, value);
+                    
+                    xhr.setRequestHeader(key, String(value));
                 });
             };
         }
@@ -161,13 +177,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         const finalStreamUrl = channel.needsProxy 
             ? `/api/stream-proxy?url=${encodeURIComponent(streamUrl)}&${new URLSearchParams(channel.headers || {}).toString()}`
             : streamUrl; // Use the proxy if needed, otherwise use the direct stream URL
-        logDebug('Final stream URL:', finalStreamUrl);
+        
+        
+        
 
         if (streamUrl.endsWith('.m3u8')) {
-            logDebug('Processing HLS stream...');
+            
             
             if (Hls.isSupported()) {
-                logDebug('HLS.js is supported, creating HLS instance');
+                
                 try {
                     hls = new Hls(hlsConfig);
                     hlsInstanceRef.current = hls;
@@ -189,53 +207,47 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
 
                     hlsEvents.forEach(event => {
                         hls.on(Hls.Events[event], (eventType: string, data: any) => {
-                            logDebug(`HLS Event [${event}]:`, { eventType, data });
+                            
                             
                             if (event === 'ERROR') {
-                                logDebug('HLS ERROR DETAILS:', {
-                                    type: data.type,
-                                    details: data.details,
-                                    fatal: data.fatal,
-                                    url: data.url
-                                });
-                                setStreamError(`HLS Error: ${data.details} (${data.type})`);
+                                
                             }
                         });
                     });
 
-                    logDebug('Loading HLS source:', finalStreamUrl);
+                    
                     hls.loadSource(finalStreamUrl);
                     hls.attachMedia(video);
                     
                     hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                        logDebug('HLS manifest parsed successfully, starting playback');
+                        
                         setStreamError(null);
                         playVideo();
                     });
 
                 } catch (e: any) {
-                    errorLogToTerminal('Error creating HLS instance:', e);
+                    
                     setStreamError(`Failed to initialize HLS.js: ${e.message}`);
                     hlsInstanceRef.current = null; // Ensure ref is null if creation fails
                 }
 
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                logDebug('Using native HLS support');
+                
                 video.src = finalStreamUrl;
                 video.addEventListener('loadedmetadata', () => {
-                    logDebug('Native HLS metadata loaded, starting playback');
+                    
                     setStreamError(null);
                     playVideo();
                 });
             } else {
-                logDebug('ERROR: HLS not supported by browser');
+                
                 setStreamError('HLS streaming not supported by this browser');
             }
         } else {
-            logDebug('Processing direct stream...');
+            
             video.src = finalStreamUrl;
             video.addEventListener('loadedmetadata', () => {
-                logDebug('Direct stream metadata loaded, starting playback');
+                
                 setStreamError(null);
                 playVideo();
             });
@@ -250,13 +262,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
                 readyState: video.readyState,
                 src: video.src
             };
-            logDebug('Video element error:', errorData);
-            errorLogToTerminal('Video element error', errorData);
+            
+            
             
             if (video.error) {
                 const errorMessage = `Video Error: ${video.error.message} (Code: ${video.error.code})`;
-                logDebug(errorMessage);
-                errorLogToTerminal(errorMessage);
+                
+                
                 setStreamError(errorMessage);
             }
         };
@@ -264,26 +276,49 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         video.addEventListener('error', handleVideoError);
 
         return () => {
-            logDebug('Cleaning up stream...');
+            
             const instanceToDestroy = hlsInstanceRef.current; // Capture the instance
             hlsInstanceRef.current = null; // Immediately nullify the ref
 
             if (instanceToDestroy) {
                 try {
                     if (typeof instanceToDestroy.destroy === 'function') {
-                        logDebug('Destroying HLS instance');
+                        
                         instanceToDestroy.destroy();
                     } else {
-                        logDebug('HLS instance destroy method not found or not a function.', instanceToDestroy);
+                        
                     }
-                } catch (e) {
-                    errorLogToTerminal('Error destroying HLS instance:', e);
+                } catch (e: any) {
+                    
                 }
             }
             video.removeEventListener('error', handleVideoError);
             setStreamError(null);
         };
-    }, [streamUrl, channel.headers, channel.needsProxy, logDebug]);
+    }, [streamUrl, channel.headers, channel.needsProxy]);
+
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        const setTracksMode = () => {
+            if (!video.textTracks) return;
+            for (let i = 0; i < video.textTracks.length; i++) {
+                video.textTracks[i].mode = subtitlesEnabled ? 'showing' : 'hidden';
+            }
+        };
+
+        // Set mode whenever enabled state changes or new tracks are added.
+        setTracksMode(); 
+
+        video.textTracks.addEventListener('addtrack', setTracksMode);
+
+        return () => {
+            if (video.textTracks) {
+                video.textTracks.removeEventListener('addtrack', setTracksMode);
+            }
+        };
+    }, [subtitlesEnabled, currentProgramme]); // Re-run effect when programme changes
 
     const showControls = useCallback(() => {
         setIsControlsVisible(true);
@@ -301,38 +336,38 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
 
         const updatePlayState = () => {
             const newState = !video.paused;
-            logDebug(`Play state changed: ${newState ? 'playing' : 'paused'}`);
+            
             setIsPlaying(newState);
         };
         
         const updateTime = () => setCurrentTime(video.currentTime);
         const updateDuration = () => {
-            logDebug(`Duration updated: ${video.duration}s`);
+            
             setDuration(video.duration);
         };
         
         const handleWaiting = () => {
-            logDebug('Video waiting for data');
+            
             setIsBuffering(true);
         };
         
         const handlePlaying = () => {
-            logDebug('Video playing');
+            
             setIsBuffering(false);
         };
 
         const handleCanPlay = () => {
-            logDebug('Video can start playing');
+            
             setIsBuffering(false);
         };
 
         const handleLoadStart = () => {
-            logDebug('Video load started');
+            
             setIsBuffering(true);
         };
 
         const handleLoadedData = () => {
-            logDebug('Video data loaded');
+            
             setIsBuffering(false);
         };
 
@@ -362,7 +397,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
             container.removeEventListener('mousemove', showControls);
             if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
         };
-    }, [showControls, logDebug]);
+    }, [showControls]);
 
     // Fullscreen and Cast API listeners
     useEffect(() => {
@@ -461,6 +496,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         }
     };
 
+    useEffect(() => {
+        // When the programme changes, ensure subtitles are off by default
+        if (currentProgramme?.subtitles) {
+            setSubtitlesEnabled(false);
+        }
+    }, [currentProgramme]);
+
     return (
         <div 
             ref={playerContainerRef}
@@ -475,7 +517,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
                 playsInline
                 muted={isMuted}
                 x-webkit-airplay="allow"
-            />
+            >
+                {/* Subtitle tracks are handled by the browser for in-band streams, no need to add <track> elements manually here */}
+            </video>
 
             {isBuffering && isPlaying && (
                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none">
@@ -490,7 +534,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
                         <p className="text-sm mb-4">{streamError}</p>
                         <button 
                             onClick={() => {
-                                logDebug('User requested stream retry');
+
                                 setStreamError(null);
                                 // Force re-initialization by updating a dependency
                                 window.location.reload();
@@ -520,6 +564,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
                 onCast={handleCast}
                 channelName={channel.name}
                 programmeTitle={currentProgramme?.title || 'Live Stream'}
+                areSubtitlesAvailable={!!currentProgramme?.subtitles}
+                subtitlesEnabled={subtitlesEnabled}
+                onToggleSubtitles={handleToggleSubtitles}
             />
 
             <button
