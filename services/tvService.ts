@@ -257,6 +257,24 @@ export const fetchChannels = async (): Promise<Channel[]> => {
                                 logDebug(`Channel ${channelData.name} (${id}) marked as needing proxy`);
                             }
                             
+                            // Remove referer header if it's just a space, as it can cause issues
+                            if (channel.headers && channel.headers.referer === ' ') {
+                                delete channel.headers.referer;
+                                logDebug(`Removed empty referer header for channel ${channelData.name} (${id})`);
+                            }
+
+                            // Remove specific user-agent header if it's the Apple TV one, as it can cause issues
+                            if (channel.headers && channel.headers['user-agent'] === 'otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56') {
+                                delete channel.headers['user-agent'];
+                                logDebug(`Removed Apple TV user-agent header for channel ${channelData.name} (${id})`);
+                            }
+
+                            // Remove specific user-agent header if it's the Apple TV one, as it can cause issues
+                            if (channel.headers && channel.headers['user-agent'] === 'otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56') {
+                                delete channel.headers['user-agent'];
+                                logDebug(`Removed Apple TV user-agent header for channel ${channelData.name} (${id})`);
+                            }
+                            
                             // Additional check for channels that use the prime stream URL
                             // Note: prime-plus1.m3u8 streams have proper CORS headers and don't need proxying
                             // prime.m3u8 streams need proxy due to CORS issues

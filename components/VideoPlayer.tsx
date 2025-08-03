@@ -7,100 +7,7 @@ import { debugLogToTerminal, errorLogToTerminal } from '../utils/debug';
 // HLS.js is loaded from a script tag in index.html, so we declare it here.
 declare const Hls: any;
 
-// --- Start of Custom HLS.js Loader for Proxied Streams ---
-const PROXY_URLS = [
-    'https://corsproxy.io/?',
-    'https://cors.eu.org/',
-    'https://thingproxy.freeboard.io/fetch/',
-];
 
-class ProxiedHlsLoader {
-    private channel: Channel;
-    private currentProxyIndex: number = 0;
-
-    constructor(channel: Channel) {
-        super();
-        this.channel = channel;
-        this.logDebug('ProxiedHlsLoader constructor called');
-    }
-
-    private logDebug(message: string, data?: any) {
-        const logMessage = `[ProxiedHlsLoader:${this.channel.name}] ${message}`;
-        if (data !== undefined) {
-            console.log(logMessage, data);
-            debugLogToTerminal(logMessage, data);
-        } else {
-            console.log(logMessage);
-            debugLogToTerminal(logMessage);
-        }
-    }
-
-    private getProxiedUrl(originalUrl: string): string {
-        const proxy = PROXY_URLS[this.currentProxyIndex];
-        // Some proxies require the protocol to be stripped
-        const cleanUrl = originalUrl.replace(/^https?:\/\//, '');
-        return `${proxy}${cleanUrl}`;
-    }
-
-    load(context: any, config: any, callbacks: any) {
-        this.logDebug('=== PROXIED HLS LOADER START ===');
-        this.logDebug('Context:', context);
-        this.logDebug('Config:', config);
-
-        // Create a default loader instance
-        const defaultLoader = new Hls.DefaultConfig.loader();
-        
-        // Override the xhrSetup to proxy ALL requests (manifest, segments, keys)
-        const originalXhrSetup = config.xhrSetup;
-        config.xhrSetup = (xhr: XMLHttpRequest, url: string) => {
-            this.logDebug(`XHR Setup for URL: ${url}`);
-            
-            // Check if this URL needs to be proxied
-            // Proxy requests to the original domain AND to Akamai CDN (for Sky Open segments)
-            const originalDomain = this.channel.url.replace(/^https?:\/\//, '').split('/')[0];
-            const requestDomain = url.replace(/^https?:\/\//, '').split('/')[0];
-            
-            let finalUrl = url;
-            if (requestDomain === originalDomain || requestDomain === 'primetv-prod.akamaized.net') {
-                // This is a request to the original domain or Akamai CDN, proxy it
-                finalUrl = this.getProxiedUrl(url);
-                this.logDebug(`Proxying request: ${url} -> ${finalUrl}`);
-            } else {
-                this.logDebug(`Direct request (not proxied): ${url}`);
-            }
-            
-            // Apply channel headers
-            if (this.channel.headers) {
-                Object.entries(this.channel.headers).forEach(([key, value]) => {
-                    this.logDebug(`Setting header: ${key} = ${value}`);
-                    xhr.setRequestHeader(key, value);
-                });
-            }
-
-            // Call original xhrSetup if it exists
-            if (originalXhrSetup) {
-                originalXhrSetup(xhr, finalUrl);
-            }
-
-            // Add error handling for this specific request
-            xhr.addEventListener('error', (e) => {
-                this.logDebug(`XHR Error for ${url}:`, e);
-                this.handleLoadError(context, config, callbacks);
-            });
-
-            xhr.addEventListener('timeout', (e) => {
-                this.logDebug(`XHR Timeout for ${url}:`, e);
-                this.handleLoadError(context, config, callbacks);
-            });
-        };
-
-        // Use the default loader to handle the actual loading
-        defaultLoader.load(context, config, callbacks);
-    }
-
-
-}
-// --- End of Custom HLS.js Loader ---
 
 const findCurrentProgrammeIndex = (programmes: Programme[] | undefined): number => {
     if (!programmes || programmes.length === 0) return -1;
@@ -232,20 +139,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
 
         logDebug('HLS configuration:', hlsConfig);
 
-        if (channel.needsProxy) {
-            logDebug('Using proxied HLS loader');
-            const proxiedLoader = new ProxiedHlsLoader(channel);
-            logDebug('ProxiedHlsLoader created:', proxiedLoader);
-            hlsConfig.loader = proxiedLoader;
-        } else if (channel.headers && channel.headers['x-forwarded-for']) {
-            logDebug('Setting up custom headers for non-proxied channel');
+        if (channel.headers && Object.keys(channel.headers).length > 0) {
+            logDebug('Setting up custom headers for channel');
             hlsConfig.xhrSetup = (xhr: XMLHttpRequest, url: string) => {
-                logDebug('Setting x-forwarded-for header:', channel.headers['x-forwarded-for']);
-                xhr.setRequestHeader('x-forwarded-for', channel.headers['x-forwarded-for']);
+                Object.entries(channel.headers).forEach(([key, value]) => {
+                    // Skip setting problematic headers
+                    if (key.toLowerCase() === 'referer' && value === ' ') {
+                        logDebug(`Skipping problematic referer header`);
+                        return;
+                    }
+                    if (key.toLowerCase() === 'user-agent' && value === 'otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56') {
+                        logDebug(`Skipping problematic user-agent header`);
+                        return;
+                    }
+                    logDebug(`Setting header: ${key} = ${value}`);
+                    xhr.setRequestHeader(key, value);
+                });
             };
         }
 
-        const finalStreamUrl = streamUrl; // ProxiedHlsLoader will handle proxying internally
+        const finalStreamUrl = channel.needsProxy 
+            ? `/api/stream-proxy?url=${encodeURIComponent(streamUrl)}&${new URLSearchParams(channel.headers || {}).toString()}`
+            : streamUrl; // Use the proxy if needed, otherwise use the direct stream URL
         logDebug('Final stream URL:', finalStreamUrl);
 
         if (streamUrl.endsWith('.m3u8')) {
@@ -253,49 +168,56 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
             
             if (Hls.isSupported()) {
                 logDebug('HLS.js is supported, creating HLS instance');
-                hls = new Hls(hlsConfig);
-                hlsInstanceRef.current = hls;
+                try {
+                    hls = new Hls(hlsConfig);
+                    hlsInstanceRef.current = hls;
 
-                // Comprehensive HLS event logging
-                const hlsEvents = [
-                    'MEDIA_ATTACHED',
-                    'MANIFEST_PARSED',
-                    'LEVEL_LOADED',
-                    'LEVEL_SWITCHED',
-                    'FRAG_LOADED',
-                    'FRAG_PARSED',
-                    'ERROR',
-                    'STALLED',
-                    'FRAG_LOAD_ERROR',
-                    'KEY_LOAD_ERROR',
-                    'MANIFEST_LOAD_ERROR'
-                ];
+                    // Comprehensive HLS event logging
+                    const hlsEvents = [
+                        'MEDIA_ATTACHED',
+                        'MANIFEST_PARSED',
+                        'LEVEL_LOADED',
+                        'LEVEL_SWITCHED',
+                        'FRAG_LOADED',
+                        'FRAG_PARSED',
+                        'ERROR',
+                        'STALLED',
+                        'FRAG_LOAD_ERROR',
+                        'KEY_LOAD_ERROR',
+                        'MANIFEST_LOAD_ERROR'
+                    ];
 
-                hlsEvents.forEach(event => {
-                    hls.on(Hls.Events[event], (eventType: string, data: any) => {
-                        logDebug(`HLS Event [${event}]:`, { eventType, data });
-                        
-                        if (event === 'ERROR') {
-                            logDebug('HLS ERROR DETAILS:', {
-                                type: data.type,
-                                details: data.details,
-                                fatal: data.fatal,
-                                url: data.url
-                            });
-                            setStreamError(`HLS Error: ${data.details} (${data.type})`);
-                        }
+                    hlsEvents.forEach(event => {
+                        hls.on(Hls.Events[event], (eventType: string, data: any) => {
+                            logDebug(`HLS Event [${event}]:`, { eventType, data });
+                            
+                            if (event === 'ERROR') {
+                                logDebug('HLS ERROR DETAILS:', {
+                                    type: data.type,
+                                    details: data.details,
+                                    fatal: data.fatal,
+                                    url: data.url
+                                });
+                                setStreamError(`HLS Error: ${data.details} (${data.type})`);
+                            }
+                        });
                     });
-                });
 
-                logDebug('Loading HLS source:', streamUrl);
-                hls.loadSource(streamUrl);
-                hls.attachMedia(video);
-                
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    logDebug('HLS manifest parsed successfully, starting playback');
-                    setStreamError(null);
-                    playVideo();
-                });
+                    logDebug('Loading HLS source:', finalStreamUrl);
+                    hls.loadSource(finalStreamUrl);
+                    hls.attachMedia(video);
+                    
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                        logDebug('HLS manifest parsed successfully, starting playback');
+                        setStreamError(null);
+                        playVideo();
+                    });
+
+                } catch (e: any) {
+                    errorLogToTerminal('Error creating HLS instance:', e);
+                    setStreamError(`Failed to initialize HLS.js: ${e.message}`);
+                    hlsInstanceRef.current = null; // Ensure ref is null if creation fails
+                }
 
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 logDebug('Using native HLS support');
@@ -343,10 +265,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
 
         return () => {
             logDebug('Cleaning up stream...');
-            if (hls) {
-                logDebug('Destroying HLS instance');
-                hls.destroy();
-                hlsInstanceRef.current = null;
+            const instanceToDestroy = hlsInstanceRef.current; // Capture the instance
+            hlsInstanceRef.current = null; // Immediately nullify the ref
+
+            if (instanceToDestroy) {
+                try {
+                    if (typeof instanceToDestroy.destroy === 'function') {
+                        logDebug('Destroying HLS instance');
+                        instanceToDestroy.destroy();
+                    } else {
+                        logDebug('HLS instance destroy method not found or not a function.', instanceToDestroy);
+                    }
+                } catch (e) {
+                    errorLogToTerminal('Error destroying HLS instance:', e);
+                }
             }
             video.removeEventListener('error', handleVideoError);
             setStreamError(null);
