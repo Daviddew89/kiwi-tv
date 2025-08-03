@@ -1,4 +1,3 @@
-
 import { Channel, EpgData, Programme } from '../types';
 import { debugLogToTerminal, errorLogToTerminal } from '../utils/debug';
 
@@ -137,7 +136,6 @@ const PRIORITY_CHANNELS = [
 const parseEpgDate = (dateStr: string): Date | null => {
   // dateStr format is "20240728000000 +1200"
   if (dateStr.length < 20) {
-    logDebug("Invalid EPG date format:", dateStr);
     errorLogToTerminal("Invalid EPG date format", { dateStr, length: dateStr.length });
     return null;
   }
@@ -155,11 +153,8 @@ const parseEpgDate = (dateStr: string): Date | null => {
 
     const isoDateStr = `${year}-${month}-${day}T${hour}:${minute}:${second}${formattedTimezone}`;
     const parsedDate = new Date(isoDateStr);
-    logDebug(`Parsed EPG date: ${dateStr} -> ${parsedDate.toISOString()}`);
     return parsedDate;
   } catch (e) {
-    const errorMsg = "Failed to parse date: " + dateStr + " - " + String(e);
-    logDebug(errorMsg);
     errorLogToTerminal("EPG date parsing failed", { dateStr, error: String(e) });
     return null;
   }
@@ -198,39 +193,27 @@ const categorizeChannel = (channelData: any): 'New Zealand' | 'International' | 
 };
 
 export const fetchChannels = async (): Promise<Channel[]> => {
-    logDebug(`=== FETCHING CHANNELS ===`);
-    logDebug(`Channels URL: ${CHANNELS_URL}`);
-    
     try {
         const response = await resilientFetch(CHANNELS_URL);
         const text = await response.text();
         
-        logDebug(`Channels response received, length: ${text.length} characters`);
-        logDebug(`Response headers:`, Object.fromEntries(response.headers.entries()));
-        
         try {
             const data = JSON.parse(text);
-            logDebug(`Channels JSON parsed successfully`);
 
             // Case 1: Data is a direct array of channels
             if (Array.isArray(data)) {
-                logDebug(`Processing direct array of channels (${data.length} channels)`);
                 const filteredChannels = data.filter(c => c.name && c.logo && c.url && c.epg_id);
-                logDebug(`Filtered to ${filteredChannels.length} valid channels`);
                 return filteredChannels;
             }
 
             // Case 2: Data is an object with a 'channels' property which is an array
             if (data && Array.isArray(data.channels)) {
-                logDebug(`Processing channels array from data.channels (${data.channels.length} channels)`);
                 const filteredChannels = data.channels.filter(c => c.name && c.logo && c.url && c.epg_id);
-                logDebug(`Filtered to ${filteredChannels.length} valid channels`);
                 return filteredChannels;
             }
             
             // Case 3: Handle the case where data is an object of channel objects
             if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
-                logDebug(`Processing object of channel objects (${Object.keys(data).length} keys)`);
                 const channels: Channel[] = Object.entries(data)
                     .map(([id, channelData]: [string, any]): Channel | null => {
                         // Ensure all required properties exist before creating the channel object
@@ -293,18 +276,10 @@ export const fetchChannels = async (): Promise<Channel[]> => {
 
                             return channel;
                         } else {
-                            logDebug(`Skipping invalid channel data for ${id}:`, {
-                                hasName: !!channelData.name,
-                                hasLogo: !!channelData.logo,
-                                hasUrl: !!channelData.mjh_master,
-                                hasEpgId: !!channelData.epg_id
-                            });
                             return null;
                         }
                     })
                     .filter((channel): channel is Channel => channel !== null);
-
-                logDebug(`Processed ${channels.length} valid channels from object structure`);
 
                 // Sort channels based on a priority list, then alphabetically.
                 channels.sort((a, b) => {
@@ -335,44 +310,34 @@ export const fetchChannels = async (): Promise<Channel[]> => {
                     return a.name.localeCompare(b.name);
                 });
                 
-                logDebug(`Channels sorted, returning ${channels.length} channels`);
                 return channels;
             }
 
-            logDebug("Unexpected channel data structure received:", data);
             return [];
         } catch (e) {
-                    logDebug("Failed to parse channel JSON. Raw response: " + text.substring(0, 500) + "...");
-        logDebug("Parse error: " + String(e));
+            errorLogToTerminal("Could not read channel data. The service might be returning an invalid format.", e);
             throw new Error("Could not read channel data. The service might be returning an invalid format.");
         }
     } catch (error) {
-        logDebug("Failed to fetch channels:", error);
+        errorLogToTerminal("Failed to fetch channels:", error);
         throw error;
     }
 };
 
 export const fetchEpg = async (): Promise<EpgData> => {
-    logDebug(`=== FETCHING EPG ===`);
-    logDebug(`EPG URL: ${EPG_URL}`);
-    
     try {
         const response = await resilientFetch(EPG_URL, { timeout: 20000 }); // EPG is large, give more time
         const xmlString = await response.text();
-        
-        logDebug(`EPG response received, length: ${xmlString.length} characters`);
-        logDebug(`Response headers:`, Object.fromEntries(response.headers.entries()));
         
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlString, "text/xml");
         
         if (xmlDoc.getElementsByTagName("parsererror").length) {
-            logDebug("Failed to parse EPG XML. Raw response:", xmlString.substring(0, 500) + "...");
+            errorLogToTerminal("Failed to parse EPG XML. Raw response:", xmlString.substring(0, 500) + "...");
             throw new Error("Could not read EPG data. The service might be returning an invalid format.");
         }
         
         const programmeNodes = xmlDoc.getElementsByTagName("programme");
-        logDebug(`Found ${programmeNodes.length} programme nodes in EPG`);
         
         const epgData: EpgData = new Map();
         let processedCount = 0;
@@ -446,18 +411,9 @@ export const fetchEpg = async (): Promise<EpgData> => {
             processedCount++;
         }
         
-        logDebug(`EPG processing complete: ${processedCount} programmes processed, ${skippedCount} skipped`);
-        logDebug(`EPG data contains ${epgData.size} channels`);
-        
-        // Sort programmes by start time
-        for (const [channelId, programmes] of epgData.entries()) {
-            programmes.sort((a, b) => a.start.getTime() - b.start.getTime());
-            logDebug(`Channel ${channelId}: ${programmes.length} programmes`);
-        }
-
         return epgData;
     } catch (error) {
-        logDebug("Failed to fetch EPG:", error);
+        errorLogToTerminal("Failed to fetch EPG:", error);
         throw error;
     }
 };
