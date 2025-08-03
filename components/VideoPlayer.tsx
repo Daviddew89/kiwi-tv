@@ -496,13 +496,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         }
     };
 
-    useEffect(() => {
-        // When the programme changes, ensure subtitles are off by default
-        if (currentProgramme?.subtitles) {
-            setSubtitlesEnabled(false);
-        }
-    }, [currentProgramme]);
-
     return (
         <div 
             ref={playerContainerRef}
