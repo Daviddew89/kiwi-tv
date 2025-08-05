@@ -84,7 +84,7 @@ export const resilientFetch = async (url: string, options: RequestInit & { timeo
 
 // --- End of Resilient Fetch Logic ---
 
-const CHANNELS_URL = 'https://i.mjh.nz/nz/tv.json';
+const CHANNELS_URL = 'https://i.mjh.nz/nz/kodi-tv.m3u8';
 const EPG_URL = 'https://i.mjh.nz/nz/epg.xml';
 
 const PRIORITY_CHANNELS = [
@@ -162,79 +162,89 @@ const categorizeChannel = (channelData: any): 'New Zealand' | 'International' | 
 
 export const fetchChannels = async (): Promise<Channel[]> => {
     const response = await resilientFetch(CHANNELS_URL);
+    const m3uData = await response.text();
 
-    const text = await response.text();
-    try {
-        const data = JSON.parse(text);
+    const lines = m3uData.split('\n').filter(line => line.trim() !== '' && !line.startsWith('#EXTM3U'));
+    const channels: Channel[] = [];
 
-        // Case 1: Data is a direct array of channels
-        if (Array.isArray(data)) {
-            return data.filter(c => c.name && c.logo && c.url && c.epg_id);
+    for (let i = 0; i < lines.length; i += 2) {
+        const infoLine = lines[i];
+        const urlLine = lines[i + 1];
+
+        if (!infoLine || !urlLine || !infoLine.startsWith('#EXTINF')) {
+            continue;
         }
 
-        // Case 2: Data is an object with a 'channels' property which is an array
-        if (data && Array.isArray(data.channels)) {
-            return data.channels.filter(c => c.name && c.logo && c.url && c.epg_id);
+        const idMatch = infoLine.match(/channel-id="([^"]*)"/);
+        const epgIdMatch = infoLine.match(/tvg-id="([^"]*)"/);
+        const logoMatch = infoLine.match(/tvg-logo="([^"]*)"/);
+        const nameMatch = infoLine.match(/,(.*)$/);
+
+        const id = idMatch ? idMatch[1] : '';
+        const epg_id = epgIdMatch ? epgIdMatch[1] : '';
+        const logo = logoMatch ? logoMatch[1] : '';
+        const name = nameMatch ? nameMatch[1].trim() : '';
+
+        if (!id || !name || !epg_id) {
+            continue;
+        }
+
+        const urlParts = urlLine.split('|');
+        let url = decodeURIComponent(urlParts[0]);
+
+        // Ensure URL is absolute
+        if (!url.startsWith('http')) {
+            const baseUrl = new URL(CHANNELS_URL);
+            url = new URL(url, baseUrl).toString();
+        }
+
+        const headers: { [key: string]: string } = {};
+        if (urlParts.length > 1) {
+            const userAgentPart = urlParts[1];
+            if (userAgentPart.startsWith('user-agent=')) {
+                headers['User-Agent'] = decodeURIComponent(userAgentPart.substring('user-agent='.length));
+            }
         }
         
-        // Case 3: Handle the case where data is an object of channel objects
-        if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
-            const channels: Channel[] = Object.entries(data)
-                .map(([id, channelData]: [string, any]): Channel | null => {
-                    // Ensure all required properties exist before creating the channel object
-                    if (channelData.name && channelData.logo && channelData.mjh_master && channelData.epg_id) {
-                        return {
-                            id: id,
-                            name: channelData.name,
-                            logo: channelData.logo,
-                            url: channelData.mjh_master,
-                            epg_id: channelData.epg_id,
-                            network: channelData.network,
-                            category: categorizeChannel(channelData),
-                        };
-                    }
-                    return null;
-                })
-                .filter((channel): channel is Channel => channel !== null);
+        const channelData = {
+            id,
+            name,
+            logo,
+            url,
+            epg_id,
+            headers: Object.keys(headers).length > 0 ? headers : undefined,
+        };
 
-            // Sort channels based on a priority list, then alphabetically.
-            channels.sort((a, b) => {
-                const getPriorityIndex = (name: string): number => {
-                    const lowerCaseName = name.toLowerCase();
-                    for (let i = 0; i < PRIORITY_CHANNELS.length; i++) {
-                        const priorityName = PRIORITY_CHANNELS[i].toLowerCase();
-                        if (lowerCaseName.startsWith(priorityName)) {
-                            return i;
-                        }
-                    }
-                    // Handle special case where channel name is just "DUKE"
-                    if (lowerCaseName.startsWith('duke')) {
-                        const dukeIndex = PRIORITY_CHANNELS.findIndex(p => p.toLowerCase() === 'tvnz duke');
-                        if (dukeIndex > -1) return dukeIndex;
-                    }
-                    return PRIORITY_CHANNELS.length; // Not a priority channel, put at the end
-                };
+        const category = categorizeChannel({ name });
 
-                const priorityA = getPriorityIndex(a.name);
-                const priorityB = getPriorityIndex(b.name);
+        const channel: Channel = {
+            ...channelData,
+            category,
+            needsProxy: true,
+            url: `/stream-proxy?url=${encodeURIComponent(url)}${headers['User-Agent'] ? `&User-Agent=${encodeURIComponent(headers['User-Agent'])}` : ''}`
+        };
 
-                if (priorityA !== priorityB) {
-                    return priorityA - priorityB;
-                }
-
-                // If priorities are the same (e.g., "TVNZ 1 Auckland", "TVNZ 1 Wellington"), sort alphabetically.
-                return a.name.localeCompare(b.name);
-            });
-            
-            return channels;
-        }
-
-        console.warn("Unexpected channel data structure received:", data);
-        return [];
-    } catch (e) {
-        console.error("Failed to parse channel JSON. Raw response:", text, e);
-        throw new Error("Could not read channel data. The service might be returning an invalid format.");
+        channels.push(channel);
     }
+
+    // Sort channels, with priority channels first
+    channels.sort((a, b) => {
+        const aPriority = PRIORITY_CHANNELS.indexOf(a.name);
+        const bPriority = PRIORITY_CHANNELS.indexOf(b.name);
+
+        if (aPriority !== -1 && bPriority !== -1) {
+            return aPriority - bPriority;
+        }
+        if (aPriority !== -1) {
+            return -1;
+        }
+        if (bPriority !== -1) {
+            return 1;
+        }
+        return a.name.localeCompare(b.name);
+    });
+
+    return channels;
 };
 
 export const fetchEpg = async (): Promise<EpgData> => {
