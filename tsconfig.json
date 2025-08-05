@@ -21,6 +21,7 @@
         "./*"
       ]
     },
+    "types": ["hls.js"],
     "noEmit": true
   },
   "include": ["api", "services"]
