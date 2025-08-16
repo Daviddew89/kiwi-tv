@@ -1,32 +1,44 @@
+
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Channel, EpgData, Programme } from './types';
 import { fetchChannels, fetchEpg } from './services/tvService';
-import ChannelDeck from './components/ChannelList'; 
-import ExpandedDetail from './components/HeroModal'; 
+import ChannelDeck from './components/ChannelList'; // Repurposed to be the ChannelDeck
+import ExpandedDetail from './components/HeroModal'; // Repurposed to be ExpandedDetail
 import VideoPlayer from './components/VideoPlayer';
 import ScheduleModal from './components/ScheduleModal';
 import DarkVeil from './components/DarkVeil';
 
-
 const AppHeader: React.FC<{ 
-    onOpenSchedule: () => void;
+    onOpenSchedule: () => void; 
+    currentShowTitle: string | null;
     scheduleButtonRef: React.RefObject<HTMLButtonElement>;
 }> = ({ onOpenSchedule, currentShowTitle, scheduleButtonRef }) => (
     <header className="fixed top-0 left-0 right-0 z-20 h-20 flex items-center justify-between px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black/50 to-transparent pointer-events-none">
-        <h1 className="text-2xl font-bold text-white drop-shadow-lg pointer-events-auto">Free<span className="text-primary-red-ochre">TV</span></h1>
-
-        <div className="flex items-center gap-4 pointer-events-auto">
-            <button
-                ref={scheduleButtonRef}
-                onClick={onOpenSchedule}
-                className="flex items-center gap-2 bg-app-surface backdrop-blur-sm border border-app-outline text-app-on-surface font-bold py-2 px-4 rounded-full transition-all hover:scale-105 hover:border-primary-red-ochre hover:text-primary-red-ochre shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-red-ochre focus:ring-offset-2 focus:ring-offset-app-bg"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Schedule
-            </button>
+        <h1 className="text-2xl font-bold text-white drop-shadow-lg pointer-events-auto">Free<span className="text-[var(--md-sys-color-primary)]">TV</span></h1>
+        
+        {/* Centered current show title */}
+        <div className="absolute top-0 left-0 right-0 h-full flex items-center justify-center">
+             {currentShowTitle && (
+                 <h2 
+                    key={currentShowTitle} // Re-triggers animation on change
+                    className="text-white text-lg font-medium truncate drop-shadow-lg animate-fade-in-down max-w-xs sm:max-w-sm md:max-w-md"
+                    title={currentShowTitle}
+                >
+                    {currentShowTitle}
+                </h2>
+            )}
         </div>
+
+        <button
+            ref={scheduleButtonRef}
+            onClick={onOpenSchedule}
+            className="flex items-center gap-2 bg-[var(--md-sys-color-surface)] backdrop-blur-sm border border-[var(--md-sys-color-outline)] text-[var(--md-sys-color-on-surface)] font-bold py-2 px-4 rounded-full transition-all hover:scale-105 hover:border-[var(--md-sys-color-primary)] hover:text-[var(--md-sys-color-primary)] shadow-lg pointer-events-auto focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--md-sys-color-background)]"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Schedule
+        </button>
     </header>
 );
 
@@ -35,17 +47,6 @@ const App: React.FC = () => {
     const [epg, setEpg] = useState<EpgData>(new Map());
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        const link = document.createElement('link');
-        link.href = 'https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&display=swap';
-        link.rel = 'stylesheet';
-        document.head.appendChild(link);
-
-        return () => {
-            document.head.removeChild(link);
-        };
-    }, []);
 
     const [activeChannelId, setActiveChannelId] = useState<string | null>(null);
     const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null);
@@ -58,7 +59,6 @@ const App: React.FC = () => {
     }>({ isOpen: false, channelContext: null });
 
     const [focusLocation, setFocusLocation] = useState<'deck' | 'header'>('deck');
-    
     const scheduleButtonRef = useRef<HTMLButtonElement>(null);
     const keyPressCooldown = useRef(false);
 
@@ -80,7 +80,7 @@ const App: React.FC = () => {
 
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-            
+            console.error(err);
         } finally {
             setLoading(false);
         }
@@ -142,8 +142,6 @@ const App: React.FC = () => {
     }, []);
     
     const handlePlay = (url: string) => {
-        
-        
         if (detailData?.context === 'live') {
             setPlayingChannel(detailData.channel);
             setCurrentStreamUrl(url);
@@ -153,7 +151,6 @@ const App: React.FC = () => {
     const handleClosePlayer = useCallback(() => {
         setPlayingChannel(null);
         setCurrentStreamUrl(null);
-        setStreamStatus(null);
         setFocusLocation('deck');
     }, []);
     
@@ -267,13 +264,6 @@ const App: React.FC = () => {
     ]);
 
     const [currentStreamUrl, setCurrentStreamUrl] = useState<string | null>(null);
-    const [streamStatus, setStreamStatus] = useState<{
-        isPlaying: boolean;
-        isBuffering: boolean;
-        error: string | null;
-        currentTime: number;
-        duration: number;
-    } | null>(null);
 
     const channelsForSchedule = scheduleViewConfig.channelContext
         ? [scheduleViewConfig.channelContext]
@@ -282,8 +272,8 @@ const App: React.FC = () => {
     const redOchreRGB: [number, number, number] = [169 / 255, 67 / 255, 50 / 255];
 
     return (
-        <div className="h-screen flex flex-col relative z-0 overflow-hidden bg-app-bg">
-            <div className="fixed inset-0 z-[-1] overflow-hidden bg-app-bg">
+        <div className="h-screen w-screen flex flex-col relative z-0">
+            <div className="fixed inset-0 z-[-1] overflow-hidden bg-[var(--md-sys-color-background)]">
                 <DarkVeil 
                     speed={0.3}
                     noiseIntensity={0.02}
@@ -299,37 +289,34 @@ const App: React.FC = () => {
                 scheduleButtonRef={scheduleButtonRef}
                 onOpenSchedule={() => handleOpenSchedule()} 
                 currentShowTitle={activeProgramme?.title || null} 
-                
             />
 
-            <main className="flex-grow flex flex-col relative overflow-hidden pt-20">
+            <main className="flex-grow flex flex-col justify-center items-center relative overflow-hidden pt-20">
                 {loading && (
                     <div className="flex flex-col justify-center items-center h-96 gap-4">
-                        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary-red-ochre"></div>
+                        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[var(--md-sys-color-primary)]"></div>
                          <p className="text-lg">Loading Channels...</p>
                     </div>
                 )}
 
                 {error && (
-                    <div className="text-center bg-primary-red-ochre/20 border border-primary-red-ochre/50 text-primary-red-ochre px-4 py-3 rounded-lg max-w-md mx-auto" role="alert">
+                    <div className="text-center bg-[var(--md-sys-color-primary)]/20 border border-[var(--md-sys-color-primary)]/50 text-[var(--md-sys-color-primary)] px-4 py-3 rounded-lg max-w-md mx-auto" role="alert">
                         <strong className="font-bold">Error:</strong>
                         <span className="block sm:inline ml-2">{error}</span>
-                        <button onClick={loadData} className="mt-4 px-4 py-2 bg-primary-red-ochre text-white rounded-full font-semibold">
+                        <button onClick={loadData} className="mt-4 px-4 py-2 bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)] rounded-full font-semibold">
                             Retry
                         </button>
                     </div>
                 )}
 
                 {!loading && !error && channels.length > 0 && (
-                     <>
-                        <ChannelDeck 
-                            channels={channels}
-                            epg={epg}
-                            activeChannelId={activeChannelId}
-                            onChannelActivate={setActiveChannelId}
-                            onChannelSelect={handleChannelSelect}
-                        />
-                    </>
+                     <ChannelDeck 
+                        channels={channels}
+                        epg={epg}
+                        activeChannelId={activeChannelId}
+                        onChannelActivate={setActiveChannelId}
+                        onChannelSelect={handleChannelSelect}
+                    />
                 )}
                 
                 <ExpandedDetail
@@ -347,7 +334,6 @@ const App: React.FC = () => {
                     onClose={handleClosePlayer} 
                     channel={playingChannel}
                     epg={epg}
-                    onStreamStatusChange={setStreamStatus}
                 />
             )}
             
@@ -358,8 +344,6 @@ const App: React.FC = () => {
                 epg={epg}
                 onProgrammeSelect={handleProgrammeSelect}
             />
-            
-            
         </div>
     );
 };

@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useRef, useMemo } from 'react';
 import { Channel, EpgData, Programme } from '../types';
 import ScheduleTimeline from './ScheduleTimeline';
@@ -59,14 +61,14 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, channels
                 <h2 className="text-2xl font-bold text-white drop-shadow-lg">7-Day Schedule</h2>
                 <button
                     onClick={onClose}
-                    className="h-10 w-10 bg-app-surface rounded-full text-app-on-surface text-2xl font-bold hover:bg-primary-red-ochre hover:text-white transition-colors flex items-center justify-center shadow-lg border border-app-outline"
+                    className="h-10 w-10 bg-[var(--md-sys-color-surface)] rounded-full text-[var(--md-sys-color-on-surface)] text-2xl font-bold hover:bg-[var(--md-sys-color-primary)] hover:text-black transition-colors flex items-center justify-center shadow-lg border border-[var(--md-sys-color-outline)]"
                     aria-label="Close schedule"
                 >
                     &times;
                 </button>
             </div>
             <div 
-                className="flex-grow bg-app-bg border border-app-outline rounded-lg shadow-2xl shadow-black/50 overflow-hidden flex relative"
+                className="flex-grow bg-[var(--md-sys-color-background)] border border-[var(--md-sys-color-outline)] rounded-lg shadow-2xl shadow-black/50 overflow-hidden flex relative"
             >
                 <div 
                     ref={scrollContainerRef}
@@ -89,6 +91,15 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, channels
                     </div>
                 </div>
             </div>
+             <style>{`
+                @keyframes fade-in {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .animate-fade-in {
+                    animation: fade-in 0.2s ease-in-out;
+                }
+            `}</style>
         </div>
     );
 };

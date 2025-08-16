@@ -27,13 +27,13 @@ const DeckChannelCard: React.FC<DeckChannelCardProps> = ({ channel, programmes, 
     `;
 
     const cardClasses = `
-        w-[45vw] sm:w-[35vw] md:w-[22vw] lg:w-[18vw] flex-shrink-0 
-        aspect-[2/3] rounded-lg
+        w-[35vw] md:w-[22vw] lg:w-[18vw] max-w-xs flex-shrink-0 
+        aspect-[2/3] rounded-[var(--border-radius-lg)] 
         snap-center overflow-hidden
         shadow-2xl shadow-black/50
-        relative bg-app-surface-variant border
+        relative bg-[var(--md-sys-color-surface-variant)] border
         transition-all duration-500 ease-in-out
-        ${isActive ? 'border-primary-red-ochre shadow-glow-primary' : 'border-transparent'}
+        ${isActive ? 'border-[var(--md-sys-color-primary)] shadow-[var(--glow-shadow-primary)]' : 'border-transparent'}
     `;
     
     const nameClasses = `
@@ -78,7 +78,7 @@ const DeckChannelCard: React.FC<DeckChannelCardProps> = ({ channel, programmes, 
                 </div>
                 {currentProgramme?.isNew && (
                     <div 
-                        className="absolute top-2 right-2 bg-primary-red-ochre text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg"
+                        className="absolute top-2 right-2 bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)] text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg"
                         title="This is a new episode or premiere"
                     >
                         NEW

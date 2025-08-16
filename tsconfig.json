@@ -10,19 +10,20 @@
       "DOM.Iterable"
     ],
     "skipLibCheck": true,
-    "moduleResolution": "node",
+    "types": [
+      "node"
+    ],
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "moduleDetection": "force",
     "allowJs": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
       ]
     },
-    "types": ["hls.js"],
+    "allowImportingTsExtensions": true,
     "noEmit": true
-  },
-  "include": ["api", "services"]
+  }
 }

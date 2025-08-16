@@ -35,9 +35,10 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ start, stop }) => {
     return (
         <div className="w-full bg-black/30 rounded-full h-2.5 overflow-hidden border border-white/10">
             <div 
-                className="bg-primary-red-ochre h-full rounded-full transition-all duration-500 ease-linear shadow-glow-primary"
+                className="bg-[var(--md-sys-color-primary)] h-full rounded-full transition-all duration-500 ease-linear"
                 style={{ 
                     width: `${progress}%`,
+                    boxShadow: '0 0 8px var(--md-sys-color-primary)'
                 }}
             ></div>
         </div>

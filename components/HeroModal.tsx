@@ -1,3 +1,4 @@
+
 import React, { useMemo, useEffect, useRef } from 'react';
 import { Channel, EpgData, Programme } from '../types';
 import ProgressBar from './ProgressBar';
@@ -140,13 +141,13 @@ const ExpandedDetail: React.FC<ExpandedDetailProps> = ({ config, onClose, onPlay
                 ref={modalRef}
                 tabIndex={-1}
                 onKeyDown={handleKeyDown}
-                className={`outline-none absolute bottom-0 left-0 right-0 w-full max-w-5xl mx-auto p-4 md:p-6 lg:p-8 bg-app-surface backdrop-blur-xl border-t-2 border-primary-red-ochre rounded-t-xl shadow-2xl shadow-black/50 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'translate-y-0' : 'translate-y-full'} max-h-[90vh] overflow-y-auto custom-scrollbar`}
+                className={`outline-none absolute bottom-0 left-0 right-0 w-full max-w-5xl mx-auto p-4 md:p-6 lg:p-8 bg-[var(--md-sys-color-surface)] backdrop-blur-[var(--glass-backdrop-blur)] border-t-2 border-[var(--md-sys-color-primary)] rounded-t-[var(--border-radius-xl)] shadow-2xl shadow-black/50 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'translate-y-0' : 'translate-y-full'} max-h-[90vh] overflow-y-auto custom-scrollbar`}
                 onClick={e => e.stopPropagation()}
             >
                 <button
                     ref={closeButtonRef}
                     onClick={onClose}
-                    className="absolute top-4 right-5 h-10 w-10 bg-app-surface rounded-full text-app-on-surface text-2xl font-bold hover:bg-primary-red-ochre hover:text-white transition-colors z-20 flex items-center justify-center shadow-lg border border-app-outline focus:outline-none focus:ring-2 focus:ring-primary-red-ochre"
+                    className="absolute top-4 right-5 h-10 w-10 bg-[var(--md-sys-color-surface)] rounded-full text-[var(--md-sys-color-on-surface)] text-2xl font-bold hover:bg-[var(--md-sys-color-primary)] hover:text-[var(--md-sys-color-on-primary)] transition-colors z-20 flex items-center justify-center shadow-lg border border-[var(--md-sys-color-outline)] focus:outline-none focus:ring-2 focus:ring-[var(--md-sys-color-primary)]"
                     aria-label="Close details"
                 >
                     &times;
@@ -159,7 +160,7 @@ const ExpandedDetail: React.FC<ExpandedDetailProps> = ({ config, onClose, onPlay
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="md:col-span-1">
-                            <img src={posterUrl || channel.logo} alt={programme.title} className={`w-full aspect-[2/3] object-cover rounded-lg shadow-xl ${!posterUrl && 'p-8'}`} />
+                            <img src={posterUrl || channel.logo} alt={programme.title} className={`w-full aspect-[2/3] object-cover rounded-[var(--border-radius-lg)] shadow-xl ${!posterUrl && 'p-8'}`} />
                         </div>
                         <div className="md:col-span-2 flex flex-col">
                              <div className="flex-grow">
@@ -172,11 +173,11 @@ const ExpandedDetail: React.FC<ExpandedDetailProps> = ({ config, onClose, onPlay
                                 
                                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
                                      {programme.rating && <RatingBadge rating={programme.rating} />}
-                                     {programme.isNew && <div className="bg-primary-red-ochre text-white text-xs font-bold px-2 py-1 rounded-md">NEW</div>}
+                                     {programme.isNew && <div className="bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)] text-xs font-bold px-2 py-1 rounded-md">NEW</div>}
                                      {programme.episodeNum && <span className="text-sm text-gray-300 truncate">{programme.episodeNum}</span>}
                                 </div>
                                
-                                <p className="text-sm text-app-on-surface-variant mb-4">{programme.description}</p>
+                                <p className="text-sm text-[var(--md-sys-color-on-surface-variant)] mb-4">{programme.description}</p>
                                 
                                 {/* Info Tags Bar */}
                                 <div className="flex flex-wrap items-center gap-2 my-4">
@@ -196,7 +197,7 @@ const ExpandedDetail: React.FC<ExpandedDetailProps> = ({ config, onClose, onPlay
                                         <InfoTag icon={<span className="material-symbols-outlined">surround_sound</span>} label={programme.audio.charAt(0).toUpperCase() + programme.audio.slice(1)} title="Audio Format" />
                                     )}
                                     {programme.subtitles && (
-                                        <InfoTag icon={<span className="material-symbols-outlined">subtitles</span>} label="Available" title="Subtitles Available" />
+                                        <InfoTag icon={<span className="material-symbols-outlined">subtitles</span>} label={programme.subtitles} title="Subtitles Available" />
                                     )}
                                 </div>
                                 
@@ -236,7 +237,7 @@ const ExpandedDetail: React.FC<ExpandedDetailProps> = ({ config, onClose, onPlay
                                     <button
                                         ref={watchNowButtonRef}
                                         onClick={handlePlayClick}
-                                        className="flex items-center gap-2 bg-primary-red-ochre text-white font-bold py-3 px-6 rounded-full transition-transform hover:scale-105 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-app-surface focus:ring-primary-red-ochre"
+                                        className="flex items-center gap-2 bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)] font-bold py-3 px-6 rounded-full transition-transform hover:scale-105 shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--md-sys-color-surface)] focus:ring-[var(--md-sys-color-primary)]"
                                         style={{textShadow: '1px 1px 2px rgba(0,0,0,0.3)'}}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -247,7 +248,7 @@ const ExpandedDetail: React.FC<ExpandedDetailProps> = ({ config, onClose, onPlay
                                     <button
                                         ref={scheduleButtonRef}
                                         onClick={onOpenSchedule}
-                                        className="flex items-center gap-2 bg-white/10 text-app-on-surface border border-app-outline font-bold py-3 px-6 rounded-full transition-all hover:scale-105 hover:bg-white/20 hover:border-white/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-app-surface focus:ring-primary-red-ochre"
+                                        className="flex items-center gap-2 bg-white/10 text-[var(--md-sys-color-on-surface)] border border-[var(--md-sys-color-outline)] font-bold py-3 px-6 rounded-full transition-all hover:scale-105 hover:bg-white/20 hover:border-white/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--md-sys-color-surface)] focus:ring-[var(--md-sys-color-primary)]"
                                     >
                                         Full Schedule
                                     </button>

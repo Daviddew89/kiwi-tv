@@ -3,14 +3,82 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kiwi TV</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <title>NZ Freeview TV Player</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,1,0" />
-    
+    <style>
+      :root {
+        /* NZ Theme */
+        --color-primary-red-ochre: #A94332; /* Red Ochre */
+        --color-primary-silver: #c0c0c0;
+        
+        --md-sys-color-primary: var(--color-primary-red-ochre);
+        --md-sys-color-on-primary: #ffffff;
+        
+        --md-sys-color-background: #080808; /* Near black */
+        --md-sys-color-on-background: #e0e0e0;
+        
+        --md-sys-color-surface: rgba(20, 20, 20, 0.7); /* Translucent dark surface */
+        --md-sys-color-on-surface: #f0f0f5;
+        --md-sys-color-surface-variant: rgba(30, 30, 30, 0.7);
+        --md-sys-color-on-surface-variant: #c8c8d0;
+        
+        --md-sys-color-outline: rgba(192, 192, 192, 0.3);
+        --md-sys-color-shadow: #000000;
+
+        /* Custom properties for the new design */
+        --glow-shadow-primary: 0 0 5px var(--md-sys-color-primary), 0 0 10px var(--md-sys-color-primary);
+        --glass-backdrop-blur: 16px;
+        --border-radius-lg: 16px;
+        --border-radius-xl: 24px;
+        --transition-speed: 300ms;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--md-sys-color-background);
+        color: var(--md-sys-color-on-background);
+        overflow: hidden; /* Prevent body scroll, all scrolling is internal */
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+        font-size: 1.25em;
+        vertical-align: sub;
+        line-height: 1;
+      }
+      @keyframes fade-in-down {
+        from {
+          opacity: 0;
+          transform: translateY(-1rem);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in-down {
+        animation: fade-in-down 300ms cubic-bezier(0.25, 1, 0.5, 1);
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        height: 8px;
+        width: 8px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: var(--md-sys-color-outline);
+        border-radius: 8px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: var(--md-sys-color-primary);
+      }
+    </style>
   <script type="importmap">
 {
   "imports": {
@@ -23,7 +91,7 @@
 </script>
 <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
+  <body class="bg-[var(--md-sys-color-background)] text-[var(--md-sys-color-on-background)]">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

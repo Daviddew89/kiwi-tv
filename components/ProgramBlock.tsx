@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Programme } from '../types';
 import RatingBadge from './RatingBadge';
@@ -68,7 +69,7 @@ const ProgramBlock: React.FC<ProgramBlockProps> = ({ programme, pixelsPerHour, s
                     <p className="text-xs text-white/70 text-ellipsis-3-lines">{programme.description}</p>
                     <div className="flex items-center gap-2 pt-1">
                         {programme.isNew && (
-                            <span className="flex-shrink-0 bg-primary-red-ochre text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                            <span className="flex-shrink-0 bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)] text-[10px] font-bold px-2 py-0.5 rounded-full">
                                 NEW
                             </span>
                         )}
@@ -76,6 +77,20 @@ const ProgramBlock: React.FC<ProgramBlockProps> = ({ programme, pixelsPerHour, s
                     </div>
                 </div>
             )}
+            <style>{`
+                 .text-ellipsis-2-lines {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                }
+                .text-ellipsis-3-lines {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                }
+            `}</style>
         </div>
     );
 };

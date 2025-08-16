@@ -14,9 +14,9 @@ const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ pixelsPerHour, sche
     let lastDay = -1; // Use -1 to ensure the first day always gets a label
 
     return (
-        <div className="sticky left-0 bg-app-bg z-10 w-24 flex-shrink-0">
-            <div className="h-24 sticky top-0 bg-app-bg z-20 border-b border-r border-app-outline flex items-center justify-center">
-                <span className="font-bold text-app-on-surface">Time</span>
+        <div className="sticky left-0 bg-[var(--md-sys-color-background)] z-10 w-24 flex-shrink-0">
+            <div className="h-24 sticky top-0 bg-[var(--md-sys-color-background)] z-20 border-b border-r border-[var(--md-sys-color-outline)] flex items-center justify-center">
+                <span className="font-bold text-[var(--md-sys-color-on-surface)]">Time</span>
             </div>
             <div className="relative">
                 {hours.map(hourIndex => {
@@ -37,12 +37,12 @@ const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({ pixelsPerHour, sche
                         >
                             {showDayLabel && (
                                 <div className="absolute -top-3 left-0 w-full text-center z-10">
-                                    <span className="bg-app-surface-variant backdrop-blur-sm border border-app-outline text-white px-3 py-1 rounded-full text-sm font-bold">
+                                    <span className="bg-[var(--md-sys-color-surface-variant)] backdrop-blur-sm border border-[var(--md-sys-color-outline)] text-white px-3 py-1 rounded-full text-sm font-bold">
                                         {currentDate.toLocaleDateString('en-NZ', { weekday: 'long' })}
                                     </span>
                                 </div>
                             )}
-                             <span className={`text-sm ${hourIndex === nowHourIndex ? 'text-primary-red-ochre font-bold' : 'text-white/60'}`}>
+                             <span className={`text-sm ${hourIndex === nowHourIndex ? 'text-[var(--md-sys-color-primary)] font-bold' : 'text-white/60'}`}>
                                 {currentDate.toLocaleTimeString('en-NZ', { hour: 'numeric', hour12: true })}
                             </span>
                         </div>
