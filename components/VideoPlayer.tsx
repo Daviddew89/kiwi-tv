@@ -22,7 +22,7 @@ const NextUpCard: React.FC<{ programme: Programme, channel: Channel }> = ({ prog
                 <p className="text-xs text-gray-300">Next Up</p>
                 <p className="text-white font-bold text-sm leading-tight text-ellipsis-3-lines">{programme.title}</p>
             </div>
-             <style>{`
+            <style>{`
                 @keyframes slide-in-up {
                     from { transform: translateY(100%); opacity: 0; }
                     to { transform: translateY(0); opacity: 1; }
@@ -84,18 +84,58 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         let hls: any;
         const playVideo = () => video.play().catch(e => console.error("Autoplay was prevented:", e));
 
-        if (streamUrl.endsWith('.m3u8')) {
+        // Use proxy for Sky Open to avoid CORS issues in development
+        let urlToPlay = streamUrl;
+        if (import.meta.env.DEV) {
+            if (streamUrl.includes('d38thhtbc3g3fc.cloudfront.net')) {
+                urlToPlay = streamUrl.replace('https://d38thhtbc3g3fc.cloudfront.net', '');
+            } else if (streamUrl.includes('i.mjh.nz/.r/maori-tv.m3u8') || streamUrl.includes('i.mjh.nz/.r/te-reo.m3u8') || streamUrl.includes('i.mjh.nz/.r/shine-tv.m3u8')) {
+                urlToPlay = streamUrl.replace('https://i.mjh.nz', '/mjh-redirect');
+            }
+        }
+
+        if (urlToPlay.endsWith('.m3u8')) {
             if (Hls.isSupported()) {
-                hls = new Hls({ enableWorker: true, lowLatencyMode: true });
-                hls.loadSource(streamUrl);
+                hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    xhrSetup: (xhr: XMLHttpRequest, url: string) => {
+                        if (import.meta.env.DEV) {
+                            if (url.includes('d38thhtbc3g3fc.cloudfront.net')) {
+                                const newUrl = url.replace('https://d38thhtbc3g3fc.cloudfront.net', '');
+                                // Re-open the request with the proxied URL
+                                // We must preserve the responseType which HLS.js might have set
+                                const responseType = xhr.responseType;
+                                xhr.open('GET', newUrl, true);
+                                xhr.responseType = responseType;
+                            } else if (url.includes('d47743dknc7xq.cloudfront.net')) {
+                                const newUrl = url.replace('https://d47743dknc7xq.cloudfront.net', '/maori-tv-cf');
+                                const responseType = xhr.responseType;
+                                xhr.open('GET', newUrl, true);
+                                xhr.responseType = responseType;
+                            } else if (url.includes('dfecjp0pnemzw.cloudfront.net')) {
+                                const newUrl = url.replace('https://dfecjp0pnemzw.cloudfront.net', '/te-reo-cf');
+                                const responseType = xhr.responseType;
+                                xhr.open('GET', newUrl, true);
+                                xhr.responseType = responseType;
+                            } else if (url.includes('info.shinetv.co.nz')) {
+                                const newUrl = url.replace('https://info.shinetv.co.nz', '/shine-tv-proxy');
+                                const responseType = xhr.responseType;
+                                xhr.open('GET', newUrl, true);
+                                xhr.responseType = responseType;
+                            }
+                        }
+                    }
+                });
+                hls.loadSource(urlToPlay);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, playVideo);
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = streamUrl;
+                video.src = urlToPlay;
                 video.addEventListener('loadedmetadata', playVideo);
             }
         } else {
-            video.src = streamUrl;
+            video.src = urlToPlay;
             playVideo();
         }
 
@@ -130,7 +170,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         video.addEventListener('durationchange', updateDuration);
         video.addEventListener('waiting', handleWaiting);
         video.addEventListener('playing', handlePlaying);
-        
+
         container.addEventListener('mousemove', showControls);
         showControls();
 
@@ -155,7 +195,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         document.addEventListener('fullscreenchange', handleFullscreenChange);
 
         const checkCastAvailability = () => {
-             if ('remote' in video && typeof video.remote.watchAvailability === 'function') {
+            if ('remote' in video && typeof video.remote.watchAvailability === 'function') {
                 video.remote.watchAvailability((available) => setIsCastAvailable(available)).catch(() => {
                     // If there's an error setting up the watch, assume not available.
                     setIsCastAvailable(false);
@@ -172,7 +212,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
         };
     }, []);
-    
+
     // Keyboard shortcuts
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -208,11 +248,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
         checkTime();
         return () => clearInterval(intervalId);
     }, [currentProgramme, nextProgramme]);
-    
+
     const handlePlayPause = () => videoRef.current?.paused ? videoRef.current?.play() : videoRef.current?.pause();
-    const handleMuteToggle = () => { if(videoRef.current) videoRef.current.muted = !videoRef.current.muted; setIsMuted(m => !m); };
+    const handleMuteToggle = () => { if (videoRef.current) videoRef.current.muted = !videoRef.current.muted; setIsMuted(m => !m); };
     const handleVolumeChange = (newVolume: number) => { if (videoRef.current) { videoRef.current.volume = newVolume; videoRef.current.muted = newVolume === 0; } setVolume(newVolume); setIsMuted(newVolume === 0); };
-    const handleSeek = (time: number) => { if(videoRef.current) videoRef.current.currentTime = time; };
+    const handleSeek = (time: number) => { if (videoRef.current) videoRef.current.currentTime = time; };
     const handleFullscreenToggle = () => {
         if (!playerContainerRef.current) return;
         if (!isFullscreen) playerContainerRef.current.requestFullscreen().catch(err => console.error(err));
@@ -231,27 +271,27 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
     };
 
     return (
-        <div 
+        <div
             ref={playerContainerRef}
             className="fixed inset-0 bg-black z-50 animate-fade-in group"
             role="dialog"
             aria-modal="true"
         >
-            <video 
-                ref={videoRef} 
-                className="w-full h-full object-contain" 
-                autoPlay 
+            <video
+                ref={videoRef}
+                className="w-full h-full object-contain"
+                autoPlay
                 playsInline
                 muted={isMuted}
                 x-webkit-airplay="allow"
             />
 
             {isBuffering && isPlaying && (
-                 <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none">
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none">
                     <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white/80"></div>
                 </div>
             )}
-            
+
             <CustomVideoControls
                 isVisible={isControlsVisible}
                 isPlaying={isPlaying}
@@ -278,7 +318,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ streamUrl, onClose, channel, 
             >
                 &times;
             </button>
-            
+
             {showNextUp && nextProgramme && (
                 <div className="absolute bottom-24 right-8 z-20 pointer-events-none">
                     <NextUpCard programme={nextProgramme} channel={channel} />

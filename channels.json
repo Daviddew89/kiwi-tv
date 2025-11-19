@@ -1,0 +1,2348 @@
+{
+    "mjh-al-jazeera": {
+        "chno": 20,
+        "description": "Al Jazeera English is international 24hour news and current affairs that takes viewers inside the stories surrounding global news",
+        "epg_id": "mjh-al-jazeera",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/al-jazeera.png",
+        "mjh_master": "https://i.mjh.nz/.r/al-jazeera.m3u8",
+        "name": "Al Jazeera",
+        "programs": [
+            [
+                1763463600,
+                "News Live"
+            ],
+            [
+                1763465400,
+                "Inside Story"
+            ],
+            [
+                1763467200,
+                "Al Jazeera World"
+            ],
+            [
+                1763470800,
+                "Newshour"
+            ],
+            [
+                1763474400,
+                "News Live"
+            ],
+            [
+                1763476200,
+                "The Stream"
+            ],
+            [
+                1763478000,
+                "Newshour"
+            ],
+            [
+                1763481600,
+                "News Live"
+            ],
+            [
+                1763483400,
+                "Echoes Of A Lost Gaza"
+            ],
+            [
+                1763485200,
+                "News Live"
+            ],
+            [
+                1763487000,
+                "Inside Story"
+            ],
+            [
+                1763488800,
+                "Newshour"
+            ],
+            [
+                1763492400,
+                "News Live"
+            ],
+            [
+                1763494200,
+                "The Bottom Line"
+            ],
+            [
+                1763496000,
+                "News Live"
+            ],
+            [
+                1763497800,
+                "Inside Story"
+            ],
+            [
+                1763499600,
+                "Newshour"
+            ]
+        ]
+    },
+    "mjh-apna-television": {
+        "chno": 36,
+        "description": "New Zealand’s first 24/7 free-to-air Indian entertainment channel delivering vibrant, youthful, value-oriented television for the entire family, which is endearing, enriching and entertaining",
+        "epg_id": "mjh-apna-television",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/apna-television.png",
+        "mjh_master": "https://i.mjh.nz/.r/apna-television.m3u8",
+        "name": "APNA Television"
+    },
+    "mjh-bbc-news": {
+        "description": "Watch live breaking news from around the world 24 hours a day every day on the BBC News channel",
+        "epg_id": "mjh-bbc-news",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/bbc-news.png",
+        "mjh_master": "https://i.mjh.nz/.r/bbc-news",
+        "name": "BBC News",
+        "programs": [
+            [
+                1763463600,
+                "BBC News"
+            ],
+            [
+                1763465400,
+                "Business Today"
+            ],
+            [
+                1763466300,
+                "BBC News"
+            ],
+            [
+                1763466900,
+                "The Travel Show"
+            ],
+            [
+                1763467200,
+                "BBC News"
+            ],
+            [
+                1763469000,
+                "BBC News"
+            ],
+            [
+                1763470800,
+                "BBC News"
+            ],
+            [
+                1763472600,
+                "BBC News"
+            ],
+            [
+                1763474100,
+                "The Travel Show"
+            ],
+            [
+                1763474400,
+                "BBC News"
+            ],
+            [
+                1763476200,
+                "Business Today USA"
+            ],
+            [
+                1763477100,
+                "BBC News"
+            ],
+            [
+                1763478000,
+                "Verified Live"
+            ],
+            [
+                1763479800,
+                "Verified Live"
+            ],
+            [
+                1763481600,
+                "Verified Live"
+            ]
+        ]
+    },
+    "mjh-bravo": {
+        "chno": 4,
+        "description": "Bravo is Life. Lived Large! New Zealand's newest TV channel delivering high-quality original unscripted programming",
+        "epg_id": "mjh-bravo",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/bravo.png",
+        "mjh_master": "https://i.mjh.nz/.r/bravo.m3u8",
+        "name": "Bravo",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763461800,
+                "Ambulance UK"
+            ],
+            [
+                1763466000,
+                "Infomercials"
+            ],
+            [
+                1763470800,
+                "Infomercials"
+            ],
+            [
+                1763485200,
+                "Infomercials"
+            ],
+            [
+                1763492400,
+                "Infomercials"
+            ],
+            [
+                1763499600,
+                "Million Dollar Listing: New York"
+            ]
+        ]
+    },
+    "mjh-bravo-plus1": {
+        "chno": 9,
+        "description": "Bravo PLUS 1 is everything on Bravo, screened one hour later!",
+        "epg_id": "mjh-bravo-plus1",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/bravo-plus1.png",
+        "mjh_master": "https://i.mjh.nz/.r/bravo-plus1.m3u8",
+        "name": "Bravo PLUS 1",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763461800,
+                "Snapped"
+            ],
+            [
+                1763465400,
+                "Ambulance UK"
+            ],
+            [
+                1763469600,
+                "Infomercials"
+            ],
+            [
+                1763474400,
+                "Infomercials"
+            ],
+            [
+                1763488800,
+                "Infomercials"
+            ],
+            [
+                1763496000,
+                "Infomercials"
+            ]
+        ]
+    },
+    "mjh-ch200": {
+        "chno": 200,
+        "description": "New Zealand Access Television. Do you want to take your next event to an even bigger audience? This channel can be rented on both a short and long-term basis. Contact CH200 at ch200.co.nz",
+        "epg_id": "mjh-ch200",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/ch200.png",
+        "mjh_master": "https://i.mjh.nz/.r/ch200.m3u8",
+        "name": "CH200",
+        "programs": [
+            [
+                1763463600,
+                "JUICE TV"
+            ],
+            [
+                1763467200,
+                "France 24 News"
+            ],
+            [
+                1763488800,
+                "JUICE TV"
+            ]
+        ]
+    },
+    "mjh-channel-news-asia": {
+        "epg_id": "mjh-channel-news-asia",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/channel-news-asia.png",
+        "mjh_master": "https://i.mjh.nz/.r/channel-news-asia.m3u8",
+        "name": "Channel News Asia (CNA)",
+        "programs": [
+            [
+                1763463600,
+                "Through Time"
+            ],
+            [
+                1763467200,
+                "Asia Tonight"
+            ],
+            [
+                1763467200,
+                "To Be Announced"
+            ],
+            [
+                1763470800,
+                "Taste of the Times"
+            ],
+            [
+                1763474400,
+                "Singapore Tonight"
+            ],
+            [
+                1763478000,
+                "I Am Canlaken"
+            ],
+            [
+                1763481600,
+                "Headline News"
+            ],
+            [
+                1763481780,
+                "Asia Tonight"
+            ],
+            [
+                1763485200,
+                "Through Time"
+            ],
+            [
+                1763488800,
+                "Singapore Tonight"
+            ],
+            [
+                1763492400,
+                "Singapore Hour"
+            ],
+            [
+                1763496000,
+                "Asia Tonight"
+            ],
+            [
+                1763499600,
+                "Taste of the Times"
+            ]
+        ]
+    },
+    "mjh-chinese-tv28": {
+        "chno": 28,
+        "description": "A channel dedicated to local Chinese people",
+        "epg_id": "mjh-chinese-tv28",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/chinese-tv28.png",
+        "mjh_master": "https://i.mjh.nz/.r/chinese-tv28.m3u8",
+        "name": "Chinese TV28"
+    },
+    "mjh-chinese-tv29": {
+        "chno": 29,
+        "description": "The ultimate destination for entertainment for the Chinese communities in New Zealand.",
+        "epg_id": "mjh-chinese-tv29",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/chinese-tv29.png",
+        "mjh_master": "https://i.mjh.nz/.r/chinese-tv29.m3u8",
+        "name": "Chinese TV29"
+    },
+    "mjh-discovery-fast1": {
+        "epg_id": "mjh-discovery-fast1",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://cdn.fullscreen.nz/v1/images/channel/linear/fast1/logos/default.png",
+        "mjh_master": "https://i.mjh.nz/.r/discovery-fast1.m3u8",
+        "name": "Warner Bros TV Motorheads",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763462100,
+                "Misfit Garage"
+            ],
+            [
+                1763464800,
+                "Speed Is The New Black"
+            ],
+            [
+                1763467800,
+                "Twin Turbos"
+            ],
+            [
+                1763470800,
+                "Diesel Brothers"
+            ],
+            [
+                1763473800,
+                "Street Outlaws"
+            ],
+            [
+                1763476500,
+                "Wheeler Dealers"
+            ],
+            [
+                1763479500,
+                "Kindig Customs"
+            ],
+            [
+                1763482200,
+                "Warner Bros. TV Motorheads Back Soon"
+            ],
+            [
+                1763485200,
+                "Warner Bros. TV Motorheads Back Soon"
+            ],
+            [
+                1763488200,
+                "Misfit Garage"
+            ],
+            [
+                1763490900,
+                "Speed Is The New Black"
+            ],
+            [
+                1763493900,
+                "Twin Turbos"
+            ],
+            [
+                1763496900,
+                "Diesel Brothers"
+            ],
+            [
+                1763499600,
+                "Street Outlaws"
+            ]
+        ]
+    },
+    "mjh-discovery-fast2": {
+        "epg_id": "mjh-discovery-fast2",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://cdn.fullscreen.nz/v1/images/channel/linear/fast2/logos/default.png",
+        "mjh_master": "https://i.mjh.nz/.r/discovery-fast2.m3u8",
+        "name": "Warner Bros TV Deadliest Catch",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763461800,
+                "Deadliest Catch"
+            ],
+            [
+                1763464500,
+                "Deadliest Catch"
+            ],
+            [
+                1763467500,
+                "Deadliest Catch"
+            ],
+            [
+                1763470200,
+                "Deadliest Catch"
+            ],
+            [
+                1763473200,
+                "Deadliest Catch"
+            ],
+            [
+                1763475900,
+                "Deadliest Catch"
+            ],
+            [
+                1763478600,
+                "Deadliest Catch"
+            ],
+            [
+                1763481600,
+                "Deadliest Catch"
+            ],
+            [
+                1763485800,
+                "Deadliest Catch"
+            ],
+            [
+                1763488500,
+                "Deadliest Catch"
+            ],
+            [
+                1763491200,
+                "Deadliest Catch"
+            ],
+            [
+                1763494200,
+                "Deadliest Catch"
+            ],
+            [
+                1763496900,
+                "Deadliest Catch"
+            ],
+            [
+                1763499900,
+                "Deadliest Catch"
+            ]
+        ]
+    },
+    "mjh-discovery-fast3": {
+        "epg_id": "mjh-discovery-fast3",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://cdn.fullscreen.nz/v1/images/channel/linear/fast3/logos/default.png",
+        "mjh_master": "https://i.mjh.nz/.r/discovery-fast3.m3u8",
+        "name": "Below Deck Vault",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763462100,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763465100,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763467800,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763470800,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763473500,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763476500,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763479500,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763482200,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763485500,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763488200,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763491200,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763493900,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763496900,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763499600,
+                "Below Deck: Mediterranean"
+            ]
+        ]
+    },
+    "mjh-discovery-fast4": {
+        "epg_id": "mjh-discovery-fast4",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://cdn.fullscreen.nz/v1/images/channel/linear/fast4/logos/default.png",
+        "mjh_master": "https://i.mjh.nz/.r/discovery-fast4.m3u8",
+        "name": "Warner Bros TV True Crime",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763461800,
+                "Body Cam"
+            ],
+            [
+                1763464800,
+                "People Magazine Investigates"
+            ],
+            [
+                1763467500,
+                "Nightmare Next Door"
+            ],
+            [
+                1763470500,
+                "Murder Comes To Town"
+            ],
+            [
+                1763473500,
+                "Murder In The Heartland"
+            ],
+            [
+                1763476200,
+                "Evil Lives Here"
+            ],
+            [
+                1763479200,
+                "Your Worst Nightmare"
+            ],
+            [
+                1763481900,
+                "Warner Bros. TV True Crime Back Soon"
+            ],
+            [
+                1763485200,
+                "Warner Bros. TV True Crime Back Soon"
+            ],
+            [
+                1763485500,
+                "Body Cam"
+            ],
+            [
+                1763488500,
+                "Body Cam"
+            ],
+            [
+                1763491200,
+                "People Magazine Investigates"
+            ],
+            [
+                1763494200,
+                "Nightmare Next Door"
+            ],
+            [
+                1763496900,
+                "Murder Comes To Town"
+            ],
+            [
+                1763499900,
+                "Murder In The Heartland"
+            ]
+        ]
+    },
+    "mjh-discovery-fast5": {
+        "epg_id": "mjh-discovery-fast5",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://cdn.fullscreen.nz/v1/images/channel/linear/fast5/logos/default.png",
+        "mjh_master": "https://i.mjh.nz/.r/discovery-fast5.m3u8",
+        "name": "Warner Bros TV Paranormal",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763461800,
+                "Portals To Hell"
+            ],
+            [
+                1763464800,
+                "The Haunted"
+            ],
+            [
+                1763467800,
+                "Ghost Asylum"
+            ],
+            [
+                1763470500,
+                "The Dead Files"
+            ],
+            [
+                1763473200,
+                "Ghost Adventures"
+            ],
+            [
+                1763476200,
+                "Paranormal Lockdown"
+            ],
+            [
+                1763478900,
+                "Kindred Spirits"
+            ],
+            [
+                1763481900,
+                "Warner Bros. TV Paranormal Back Soon"
+            ],
+            [
+                1763485200,
+                "Warner Bros. TV Paranormal Back Soon"
+            ],
+            [
+                1763485500,
+                "Portals To Hell"
+            ],
+            [
+                1763488500,
+                "Portals To Hell"
+            ],
+            [
+                1763491200,
+                "The Haunted"
+            ],
+            [
+                1763494200,
+                "Ghost Asylum"
+            ],
+            [
+                1763497200,
+                "The Dead Files"
+            ],
+            [
+                1763499900,
+                "Ghost Adventures"
+            ]
+        ]
+    },
+    "mjh-discovery-fast6": {
+        "epg_id": "mjh-discovery-fast6",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://cdn.fullscreen.nz/v1/images/channel/linear/fast6/logos/default.png",
+        "mjh_master": "https://i.mjh.nz/.r/discovery-fast6.m3u8",
+        "name": "Warner Bros TV House Hunters",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763463000,
+                "House Hunters"
+            ],
+            [
+                1763464200,
+                "House Hunters International"
+            ],
+            [
+                1763465700,
+                "House Hunters International"
+            ],
+            [
+                1763467200,
+                "House Hunters"
+            ],
+            [
+                1763468400,
+                "House Hunters International"
+            ],
+            [
+                1763469900,
+                "House Hunters International"
+            ],
+            [
+                1763471400,
+                "House Hunters"
+            ],
+            [
+                1763472600,
+                "House Hunters International"
+            ],
+            [
+                1763474100,
+                "House Hunters International"
+            ],
+            [
+                1763475600,
+                "House Hunters"
+            ],
+            [
+                1763476800,
+                "House Hunters International"
+            ],
+            [
+                1763478300,
+                "House Hunters International"
+            ],
+            [
+                1763479500,
+                "House Hunters"
+            ],
+            [
+                1763481000,
+                "House Hunters International"
+            ],
+            [
+                1763482500,
+                "House Hunters International"
+            ],
+            [
+                1763484000,
+                "Warner Bros. TV House Hunters Back Soon"
+            ],
+            [
+                1763485200,
+                "Warner Bros. TV House Hunters Back Soon"
+            ],
+            [
+                1763486400,
+                "House Hunters"
+            ],
+            [
+                1763487900,
+                "House Hunters International"
+            ],
+            [
+                1763489100,
+                "House Hunters International"
+            ],
+            [
+                1763490600,
+                "House Hunters"
+            ],
+            [
+                1763492100,
+                "House Hunters International"
+            ],
+            [
+                1763493300,
+                "House Hunters International"
+            ],
+            [
+                1763494800,
+                "House Hunters"
+            ],
+            [
+                1763496300,
+                "House Hunters International"
+            ],
+            [
+                1763497500,
+                "House Hunters International"
+            ],
+            [
+                1763499000,
+                "House Hunters"
+            ],
+            [
+                1763500500,
+                "House Hunters International"
+            ]
+        ]
+    },
+    "mjh-discovery-hgtv": {
+        "chno": 19,
+        "description": "HGTV is dedicated to the very best in home improvement, DIY design, real estate and gardening.",
+        "epg_id": "mjh-discovery-hgtv",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://cdn.fullscreen.nz/v1/images/channel/linear/hgtv/logos/default.png",
+        "mjh_master": "https://i.mjh.nz/.r/discovery-hgtv.m3u8",
+        "name": "HGTV",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763463900,
+                "House Hunters International"
+            ],
+            [
+                1763465400,
+                "Christina On The Coast"
+            ],
+            [
+                1763468400,
+                "Design Down Under"
+            ],
+            [
+                1763471400,
+                "Home Town"
+            ],
+            [
+                1763474400,
+                "Fixer To Fabulous"
+            ],
+            [
+                1763477400,
+                "Fixer To Fabulous"
+            ],
+            [
+                1763480400,
+                "Home in a Heartbeat with Galey Alix"
+            ],
+            [
+                1763483400,
+                "House Hunters"
+            ],
+            [
+                1763485200,
+                "Renovation Face-Off"
+            ],
+            [
+                1763488200,
+                "My Lottery Dream Home"
+            ],
+            [
+                1763489700,
+                "House Hunters International"
+            ],
+            [
+                1763491200,
+                "House Hunters"
+            ],
+            [
+                1763492700,
+                "House Hunters"
+            ],
+            [
+                1763494200,
+                "House Hunters International"
+            ],
+            [
+                1763495700,
+                "House Hunters"
+            ],
+            [
+                1763497200,
+                "Celebrity IOU"
+            ],
+            [
+                1763500200,
+                "Renovation Face-Off"
+            ]
+        ]
+    },
+    "mjh-discovery-ptcn": {
+        "epg_id": "mjh-discovery-ptcn",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://cdn-prod.fullscreen.nz/v1/images/channel/linear/ptcn/logos/default.png",
+        "mjh_master": "https://i.mjh.nz/.r/discovery-ptcn.m3u8",
+        "name": "CNN Headlines",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763402400,
+                "Top Stories from CNN"
+            ],
+            [
+                1763488800,
+                "Top Stories from CNN"
+            ]
+        ]
+    },
+    "mjh-discovery-ptmb": {
+        "epg_id": "mjh-discovery-ptmb",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://cdn-prod.fullscreen.nz/v1/images/channel/linear/ptmb/logos/default.png",
+        "mjh_master": "https://i.mjh.nz/.r/discovery-ptmb.m3u8",
+        "name": "MythBusters",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763461540,
+                "MythBusters"
+            ],
+            [
+                1763465090,
+                "MythBusters"
+            ],
+            [
+                1763468600,
+                "MythBusters"
+            ],
+            [
+                1763472169,
+                "MythBusters"
+            ],
+            [
+                1763475739,
+                "MythBusters"
+            ],
+            [
+                1763479258,
+                "MythBusters"
+            ],
+            [
+                1763482798,
+                "MythBusters"
+            ],
+            [
+                1763485200,
+                "MythBusters"
+            ],
+            [
+                1763486308,
+                "MythBusters"
+            ],
+            [
+                1763489852,
+                "MythBusters"
+            ],
+            [
+                1763493421,
+                "MythBusters"
+            ],
+            [
+                1763496989,
+                "MythBusters"
+            ]
+        ]
+    },
+    "mjh-discovery-ptms": {
+        "epg_id": "mjh-discovery-ptms",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://cdn.fullscreen.nz/v1/images/channel/linear/ptms/logos/default.png",
+        "mjh_master": "https://i.mjh.nz/.r/discovery-ptms.m3u8",
+        "name": "MovieSphere",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763463344,
+                "War"
+            ],
+            [
+                1763470355,
+                "One in the Chamber"
+            ],
+            [
+                1763470815,
+                "One in the Chamber"
+            ],
+            [
+                1763476399,
+                "Hunt to Kill"
+            ],
+            [
+                1763483323,
+                "Rob-B-Hood"
+            ],
+            [
+                1763485200,
+                "Rob-B-Hood"
+            ],
+            [
+                1763492152,
+                "Love Me"
+            ],
+            [
+                1763498983,
+                "Gone"
+            ]
+        ]
+    },
+    "mjh-dw-news": {
+        "description": "Watch Germany's international English news channel Deutsche Welle",
+        "epg_id": "mjh-dw-news",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://www.dw.com/images/icons/favicon-540x540.png",
+        "mjh_master": "https://i.mjh.nz/.r/dw-news.m3u8",
+        "name": "DW English",
+        "programs": [
+            [
+                1763463600,
+                "DW"
+            ],
+            [
+                1763465400,
+                "In Good Shape"
+            ],
+            [
+                1763467200,
+                "DW"
+            ],
+            [
+                1763468100,
+                "Close up"
+            ],
+            [
+                1763469900,
+                "Shift"
+            ],
+            [
+                1763470800,
+                "DW"
+            ],
+            [
+                1763471700,
+                "Planet A"
+            ],
+            [
+                1763472600,
+                "Eco India"
+            ],
+            [
+                1763474400,
+                "DW"
+            ],
+            [
+                1763476200,
+                "Global Us"
+            ],
+            [
+                1763478000,
+                "DW"
+            ],
+            [
+                1763479800,
+                "Eco Africa"
+            ],
+            [
+                1763481600,
+                "DW"
+            ]
+        ]
+    },
+    "mjh-eden": {
+        "chno": 8,
+        "description": "eden delivers A Better Everyday as a new general entertainment channel. Offering an escape from life's routine, with shows to entertain, inform, provoke new perspectives and interests for viewers.",
+        "epg_id": "mjh-eden",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/eden.png",
+        "mjh_master": "https://i.mjh.nz/.r/eden.m3u8",
+        "name": "eden",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763463600,
+                "Restaurant: Impossible"
+            ],
+            [
+                1763466600,
+                "Salvage Hunters: The Restorers"
+            ],
+            [
+                1763469600,
+                "House Hunters"
+            ],
+            [
+                1763471100,
+                "Border Security"
+            ],
+            [
+                1763472600,
+                "Border Security"
+            ],
+            [
+                1763474400,
+                "Highclere: Behind the Scenes"
+            ],
+            [
+                1763477400,
+                "Undercover Billionaire"
+            ],
+            [
+                1763480400,
+                "Salvage Hunters: The Restorers"
+            ],
+            [
+                1763483700,
+                "House Hunters"
+            ],
+            [
+                1763485200,
+                "Beat Bobby Flay"
+            ],
+            [
+                1763487000,
+                "Mysteries Of The Missing"
+            ],
+            [
+                1763490600,
+                "Restaurant: Impossible"
+            ],
+            [
+                1763494200,
+                "Salvage Hunters: The Restorers"
+            ],
+            [
+                1763497800,
+                "Mysteries Of The Missing"
+            ]
+        ]
+    },
+    "mjh-eden-plus1": {
+        "chno": 18,
+        "description": "All the great shows on eden, broadcast one hour later.",
+        "epg_id": "mjh-eden-plus1",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/eden-plus1.png",
+        "mjh_master": "https://i.mjh.nz/.r/eden-plus1.m3u8",
+        "name": "eden+1",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763461800,
+                "Mysteries Of The Missing"
+            ],
+            [
+                1763465400,
+                "Beat Bobby Flay"
+            ],
+            [
+                1763467200,
+                "Restaurant: Impossible"
+            ],
+            [
+                1763470200,
+                "Salvage Hunters: The Restorers"
+            ],
+            [
+                1763473200,
+                "House Hunters"
+            ],
+            [
+                1763474700,
+                "Border Security"
+            ],
+            [
+                1763476200,
+                "Border Security"
+            ],
+            [
+                1763478000,
+                "Highclere: Behind the Scenes"
+            ],
+            [
+                1763481000,
+                "Undercover Billionaire"
+            ],
+            [
+                1763484000,
+                "Salvage Hunters: The Restorers"
+            ],
+            [
+                1763487300,
+                "House Hunters"
+            ],
+            [
+                1763488800,
+                "Beat Bobby Flay"
+            ],
+            [
+                1763490600,
+                "Mysteries Of The Missing"
+            ],
+            [
+                1763494200,
+                "Restaurant: Impossible"
+            ],
+            [
+                1763497800,
+                "Salvage Hunters: The Restorers"
+            ]
+        ]
+    },
+    "mjh-firstlight": {
+        "chno": 26,
+        "description": "Firstlight presents content from selected Christian ministries around the world",
+        "epg_id": "mjh-firstlight",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/firstlight.png",
+        "mjh_master": "https://i.mjh.nz/.r/firstlight.m3u8",
+        "name": "Firstlight",
+        "programs": [
+            [
+                1763463600,
+                "Pathway to Paradise"
+            ],
+            [
+                1763465400,
+                "Take Charge of Your Health"
+            ],
+            [
+                1763470800,
+                "SDA Church"
+            ],
+            [
+                1763472600,
+                "Secrets Unsealed"
+            ],
+            [
+                1763474400,
+                "It Is Written"
+            ],
+            [
+                1763476200,
+                "ABC of Prayer"
+            ],
+            [
+                1763479800,
+                "George Opiyo"
+            ],
+            [
+                1763481600,
+                "Amazing Facts Doug Batchelor"
+            ],
+            [
+                1763483400,
+                "Native New Day"
+            ],
+            [
+                1763485200,
+                "Pathway to Paradise"
+            ],
+            [
+                1763488800,
+                "The Incredible Journey"
+            ],
+            [
+                1763490600,
+                "It Is Written USA"
+            ],
+            [
+                1763494200,
+                "Conrad Vine"
+            ],
+            [
+                1763496000,
+                "Landmarks of Prophecy"
+            ]
+        ]
+    },
+    "mjh-hope-channel": {
+        "chno": 27,
+        "description": "Hope Channel offers programs on holistic Christian living and focuses of faith, health, relationships, and community. It’s television that will change your life!",
+        "epg_id": "mjh-hope-channel",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/hope-channel.png",
+        "mjh_master": "https://i.mjh.nz/.r/hope-channel.m3u8",
+        "name": "Hope Channel",
+        "programs": [
+            [
+                1763460000,
+                "Treasure Lies"
+            ],
+            [
+                1763466300,
+                "The Search"
+            ],
+            [
+                1763468400,
+                "Unknown Airing"
+            ],
+            [
+                1763469900,
+                "Beginnings"
+            ],
+            [
+                1763473200,
+                "Cross Connection - John"
+            ],
+            [
+                1763476200,
+                "A Closer Walk"
+            ],
+            [
+                1763478000,
+                "It Is Written"
+            ],
+            [
+                1763479800,
+                "Naturally Gourmet"
+            ],
+            [
+                1763481600,
+                "Chosen"
+            ],
+            [
+                1763483400,
+                "Cross Connection - John"
+            ],
+            [
+                1763487000,
+                "Evolution Impossible"
+            ],
+            [
+                1763488800,
+                "Amazing Adventures"
+            ],
+            [
+                1763492400,
+                "Go Healthy For Good"
+            ],
+            [
+                1763496000,
+                "Authentic"
+            ],
+            [
+                1763497800,
+                "Answers In Genesis"
+            ]
+        ]
+    },
+    "mjh-maori-tv": {
+        "chno": 5,
+        "description": "New Zealand’s indigenous media organisation, Whakaata Māori screens free-to-air and on demand programming that informs, educates and entertains.",
+        "epg_id": "mjh-maori-tv",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/maori-tv.png",
+        "mjh_master": "https://i.mjh.nz/.r/maori-tv.m3u8",
+        "name": "Whakaata Māori",
+        "network": "Māori",
+        "programs": [
+            [
+                1763459580,
+                "Whakaata Māori"
+            ],
+            [
+                1763487000,
+                "Kori Club"
+            ],
+            [
+                1763487360,
+                "Tūhura"
+            ],
+            [
+                1763487720,
+                "Takaro Tribe"
+            ],
+            [
+                1763488560,
+                "Darwin and Newts"
+            ],
+            [
+                1763489280,
+                "Island of Mystery"
+            ],
+            [
+                1763489820,
+                "Unknown Airing"
+            ],
+            [
+                1763490480,
+                "Tamaiti Tū Spring"
+            ],
+            [
+                1763491200,
+                "Tamariki Haka"
+            ],
+            [
+                1763491860,
+                "Mataora Digital"
+            ],
+            [
+                1763492400,
+                "Pūkana 2024"
+            ],
+            [
+                1763494200,
+                "Ōpaki"
+            ],
+            [
+                1763496000,
+                "Tōku Reo"
+            ],
+            [
+                1763497800,
+                "Tui Teka's Trail"
+            ],
+            [
+                1763499600,
+                "Haka Regionals 2024"
+            ]
+        ]
+    },
+    "mjh-mood-1286": {
+        "epg_id": "mjh-mood-1286",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://gizmeon.mdc.akamaized.net/thumbnails/fastchannel/1744244778333.png",
+        "mjh_master": "https://i.mjh.nz/.r/mood-1286.m3u8",
+        "name": "Big Rig",
+        "network": "Mood"
+    },
+    "mjh-mood-1287": {
+        "epg_id": "mjh-mood-1287",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://gizmeon.mdc.akamaized.net/thumbnails/fastchannel/1743730111010.png",
+        "mjh_master": "https://i.mjh.nz/.r/mood-1287.m3u8",
+        "name": "The Groat",
+        "network": "Mood"
+    },
+    "mjh-mood-1288": {
+        "epg_id": "mjh-mood-1288",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://gizmeon.mdc.akamaized.net/thumbnails/fastchannel/1744280017572.png",
+        "mjh_master": "https://i.mjh.nz/.r/mood-1288.m3u8",
+        "name": "Melo",
+        "network": "Mood"
+    },
+    "mjh-mood-1289": {
+        "epg_id": "mjh-mood-1289",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://gizmeon.mdc.akamaized.net/thumbnails/fastchannel/1762940270646.png",
+        "mjh_master": "https://i.mjh.nz/.r/mood-1289.m3u8",
+        "name": "J2",
+        "network": "Mood"
+    },
+    "mjh-mood-1290": {
+        "epg_id": "mjh-mood-1290",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://gizmeon.mdc.akamaized.net/thumbnails/fastchannel/1744244355255.png",
+        "mjh_master": "https://i.mjh.nz/.r/mood-1290.m3u8",
+        "name": "JuiceTV",
+        "network": "Mood"
+    },
+    "mjh-panda-tv": {
+        "chno": 37,
+        "description": "Panda TV is a part of the NZCM media group, with shows broadcast in Chinese and English, or Chinese with English subtitles",
+        "epg_id": "mjh-panda-tv",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/panda-tv.png",
+        "mjh_master": "https://i.mjh.nz/.r/panda-tv.m3u8",
+        "name": "Panda TV"
+    },
+    "mjh-parliament-tv": {
+        "chno": 31,
+        "description": "Broadcasts the full unedited proceedings of Parliament",
+        "epg_id": "mjh-parliament-tv",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/parliament-tv.png",
+        "mjh_master": "https://i.mjh.nz/.r/parliament-tv.m3u8",
+        "name": "Parliament TV",
+        "programs": [
+            [
+                1763463600,
+                "Parliament TV"
+            ],
+            [
+                1763485200,
+                "Parliament TV"
+            ]
+        ]
+    },
+    "mjh-prime": {
+        "chno": 15,
+        "description": "From world-class sport to intriguing real-life shows, uniquely Kiwi stories, global entertainment and fascinating documentaries has something for every Kiwi.",
+        "epg_id": "mjh-prime",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56",
+            "x-forwarded-for": "202.89.4.222"
+        },
+        "logo": "https://i.mjh.nz/.images/sky-open.png",
+        "mjh_master": "https://i.mjh.nz/.r/prime.m3u8",
+        "name": "Sky Open",
+        "network": "Sky",
+        "programs": [
+            [
+                1763461800,
+                "Billions"
+            ],
+            [
+                1763465400,
+                "Infomercials"
+            ],
+            [
+                1763485200,
+                "Infomercials"
+            ],
+            [
+                1763492400,
+                "The Drawing Show"
+            ],
+            [
+                1763492700,
+                "The Drawing Show"
+            ],
+            [
+                1763493000,
+                "Moe & Friends"
+            ],
+            [
+                1763493900,
+                "Kiri And Lou"
+            ],
+            [
+                1763494200,
+                "Kiri And Lou"
+            ],
+            [
+                1763494500,
+                "Michal And Moe"
+            ],
+            [
+                1763496000,
+                "Aotearoa Rugby Pod‎"
+            ],
+            [
+                1763499900,
+                "Infomercials"
+            ]
+        ]
+    },
+    "mjh-prime-plus1": {
+        "chno": 21,
+        "description": "Sky Open+1 gives you a second chance to watch Sky Open's wide range of sport and entertainment later, so you don't have to worry about missing a moment!",
+        "epg_id": "mjh-prime-plus1",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/sky-open-plus1.png",
+        "mjh_master": "https://i.mjh.nz/.r/prime-plus1.m3u8",
+        "name": "Sky Open+1",
+        "programs": [
+            [
+                1763461800,
+                "Outback Farm"
+            ],
+            [
+                1763465400,
+                "Billions"
+            ],
+            [
+                1763469000,
+                "Infomercials"
+            ],
+            [
+                1763488800,
+                "Infomercials"
+            ],
+            [
+                1763496000,
+                "The Drawing Show"
+            ],
+            [
+                1763496300,
+                "The Drawing Show"
+            ],
+            [
+                1763496600,
+                "Moe & Friends"
+            ],
+            [
+                1763497500,
+                "Kiri And Lou"
+            ],
+            [
+                1763497800,
+                "Kiri And Lou"
+            ],
+            [
+                1763498100,
+                "Michal And Moe"
+            ],
+            [
+                1763499600,
+                "Aotearoa Rugby Pod‎"
+            ]
+        ]
+    },
+    "mjh-redbull-tv": {
+        "description": "Red Bull TV: beyond the ordinary live events and videos featuring inspirational stories covering sports, music and lifestyle entertainment. Anytime, anywhere.",
+        "epg_id": "mjh-redbull-tv",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/redbull-tv.png",
+        "mjh_master": "https://i.mjh.nz/.r/redbull-tv.m3u8",
+        "name": "Redbull TV",
+        "programs": [
+            [
+                1763463697,
+                "Against the Odds"
+            ],
+            [
+                1763468570,
+                "Valley Uprising"
+            ],
+            [
+                1763474520,
+                "Yamnuska: The Ragged Edge "
+            ],
+            [
+                1763478536,
+                "The Next Centimeter "
+            ],
+            [
+                1763480112,
+                "Au Revoir"
+            ]
+        ]
+    },
+    "mjh-rush-nz": {
+        "chno": 14,
+        "description": "New Zealand's home of high adventure, high octane and high adrenaline reality. Theme nights every day of the week where you will experience more of what you love. A selection of the best shows on Rush will also be available to stream on ThreeNow.",
+        "epg_id": "mjh-rush-nz",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/rush-nz.png",
+        "mjh_master": "https://i.mjh.nz/.r/rush-nz.m3u8",
+        "name": "RUSH",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763461800,
+                "Wheeler Dealers"
+            ],
+            [
+                1763465100,
+                "Alaskan Bush People"
+            ],
+            [
+                1763467800,
+                "Louisiana Law"
+            ],
+            [
+                1763470800,
+                "Deadliest Catch"
+            ],
+            [
+                1763473500,
+                "The Last Alaskans"
+            ],
+            [
+                1763476500,
+                "American Chopper"
+            ],
+            [
+                1763479500,
+                "Wheeler Dealers"
+            ],
+            [
+                1763482500,
+                "Alaskan Bush People"
+            ],
+            [
+                1763485200,
+                "Louisiana Law"
+            ],
+            [
+                1763488500,
+                "Wheeler Dealers"
+            ],
+            [
+                1763492100,
+                "Alaskan Bush People"
+            ],
+            [
+                1763495700,
+                "Deadliest Catch"
+            ],
+            [
+                1763499000,
+                "The Last Alaskans"
+            ]
+        ]
+    },
+    "mjh-shine-tv": {
+        "chno": 25,
+        "description": "It's your department store, right in the comfort of your own home",
+        "epg_id": "mjh-shine-tv",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/shine-tv.png",
+        "mjh_master": "https://i.mjh.nz/.r/shine-tv.m3u8",
+        "name": "Shine TV",
+        "programs": [
+            [
+                1763463600,
+                "Anglican Diocese, Nelson"
+            ],
+            [
+                1763467200,
+                "The Dream Centre"
+            ],
+            [
+                1763470800,
+                "New Creation TV"
+            ],
+            [
+                1763472600,
+                "Sanctuary on Shine"
+            ],
+            [
+                1763474400,
+                "Finding You"
+            ],
+            [
+                1763481600,
+                "Turning Point"
+            ],
+            [
+                1763483400,
+                "Running With Fire"
+            ],
+            [
+                1763485200,
+                "God's Word Fresh 4 U Today"
+            ],
+            [
+                1763485380,
+                "LIFE Sunday Service"
+            ],
+            [
+                1763488800,
+                "Deditos"
+            ],
+            [
+                1763490600,
+                "Hillsong Kids: Cubbyhouse"
+            ],
+            [
+                1763492400,
+                "Dot Conner: Webtective"
+            ],
+            [
+                1763493300,
+                "Little Worship Company"
+            ],
+            [
+                1763494200,
+                "Life TV with Paul de Jong"
+            ],
+            [
+                1763496000,
+                "New Creation TV"
+            ],
+            [
+                1763497800,
+                "Thoughts & Comments"
+            ],
+            [
+                1763499600,
+                "The 700 Club"
+            ]
+        ]
+    },
+    "mjh-te-reo": {
+        "chno": 10,
+        "description": "Te Reo channel is a immersion experience for fluent speakers of Māori and those learning the language - there are no subtitles. Uniquely Māori entertainment and a strongly Māori world view.",
+        "epg_id": "mjh-te-reo",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/te-reo.png",
+        "mjh_master": "https://i.mjh.nz/.r/te-reo.m3u8",
+        "name": "Te Reo",
+        "network": "Māori",
+        "programs": [
+            [
+                1763459760,
+                "Te Reo"
+            ]
+        ]
+    },
+    "mjh-three": {
+        "chno": 3,
+        "description": "Three is the one-stop shop for entertainment, broadcasting some of the most-loved international and New Zealand drama, top-rating news and current affairs and has firmly established itself as the home of local comedy",
+        "epg_id": "mjh-three",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/three.png",
+        "mjh_master": "https://i.mjh.nz/.r/three.m3u8",
+        "name": "Three",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763462400,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763466000,
+                "Paper Dolls"
+            ],
+            [
+                1763469600,
+                "Infomercials"
+            ],
+            [
+                1763478000,
+                "Infomercials"
+            ],
+            [
+                1763485200,
+                "Alaska: The Last Frontier"
+            ],
+            [
+                1763488500,
+                "The Last Alaskans"
+            ],
+            [
+                1763492100,
+                "Bering Sea Gold"
+            ],
+            [
+                1763495700,
+                "Infomercials"
+            ]
+        ]
+    },
+    "mjh-three-plus1": {
+        "chno": 13,
+        "description": "ThreePlus1 provides all of Three's content, just delayed by one hour.  So you get a second chance to watch your favourite show on Three!",
+        "epg_id": "mjh-three-plus1",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/three-plus1.png",
+        "mjh_master": "https://i.mjh.nz/.r/three-plus1.m3u8",
+        "name": "ThreePlus1",
+        "network": "Discovery",
+        "programs": [
+            [
+                1763462400,
+                "Top Guns: Inside the RAF"
+            ],
+            [
+                1763466000,
+                "Below Deck: Mediterranean"
+            ],
+            [
+                1763469600,
+                "Paper Dolls"
+            ],
+            [
+                1763473200,
+                "Infomercials"
+            ],
+            [
+                1763481600,
+                "Infomercials"
+            ],
+            [
+                1763488800,
+                "Alaska: The Last Frontier"
+            ],
+            [
+                1763492100,
+                "The Last Alaskans"
+            ],
+            [
+                1763495700,
+                "Bering Sea Gold"
+            ],
+            [
+                1763499300,
+                "Infomercials"
+            ]
+        ]
+    },
+    "mjh-trackside-1": {
+        "chno": 23,
+        "description": "The best of live racing from New Zealand and the world",
+        "epg_id": "mjh-trackside-1",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56",
+            "x-forwarded-for": "202.89.4.222"
+        },
+        "logo": "https://i.mjh.nz/.images/trackside-1.png",
+        "mjh_master": "https://i.mjh.nz/.r/trackside-1.m3u8",
+        "name": "Trackside 1",
+        "network": "Sky"
+    },
+    "mjh-trackside-2": {
+        "chno": 24,
+        "description": "The best of live racing from New Zealand and the world",
+        "epg_id": "mjh-trackside-2",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56",
+            "x-forwarded-for": "202.89.4.222"
+        },
+        "logo": "https://i.mjh.nz/.images/trackside-2.png",
+        "mjh_master": "https://i.mjh.nz/.r/trackside-2.m3u8",
+        "name": "Trackside 2",
+        "network": "Sky"
+    },
+    "mjh-trackside-premier": {
+        "description": "POPUP: The best of live racing from New Zealand and the world",
+        "epg_id": "mjh-trackside-premier",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56",
+            "x-forwarded-for": "202.89.4.222"
+        },
+        "logo": "https://i.mjh.nz/.images/trackside-premier.png",
+        "mjh_master": "https://i.mjh.nz/.r/trackside-premier.m3u8",
+        "name": "Trackside Premier",
+        "network": "Sky"
+    },
+    "mjh-tvnz-1": {
+        "chno": 1,
+        "description": "New Zealand's leading producer of local entertainment programmes, news and current affairs, and national television events",
+        "epg_id": "mjh-tvnz-1",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/tvnz-1.png",
+        "mjh_master": "https://i.mjh.nz/.r/tvnz-1.m3u8",
+        "name": "TVNZ 1",
+        "network": "TVNZ",
+        "programs": [
+            [
+                1763461500,
+                "Snow Patrol NZ"
+            ],
+            [
+                1763464500,
+                "My Dream Green Home"
+            ],
+            [
+                1763467500,
+                "Te Karere"
+            ],
+            [
+                1763469000,
+                "TVNZ1 Quiz"
+            ],
+            [
+                1763470800,
+                "Infomercials"
+            ],
+            [
+                1763472600,
+                "Infomercials"
+            ],
+            [
+                1763474400,
+                "Infomercials"
+            ],
+            [
+                1763476200,
+                "Infomercials"
+            ],
+            [
+                1763478000,
+                "Infomercials"
+            ],
+            [
+                1763479800,
+                "Infomercials"
+            ],
+            [
+                1763481600,
+                "Infomercials"
+            ],
+            [
+                1763483400,
+                "Te Karere"
+            ],
+            [
+                1763485200,
+                "Breakfast"
+            ],
+            [
+                1763496000,
+                "Riddiculous"
+            ],
+            [
+                1763499600,
+                "Tipping Point"
+            ]
+        ]
+    },
+    "mjh-tvnz-2": {
+        "chno": 2,
+        "description": "TVNZ 2 brings you the best entertainment from New Zealand and the rest of the world, with a strong line up of the world's most engaging dramas, comedy and reality programmes",
+        "epg_id": "mjh-tvnz-2",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/tvnz-2.png",
+        "mjh_master": "https://i.mjh.nz/.r/tvnz-2.m3u8",
+        "name": "TVNZ 2",
+        "network": "TVNZ",
+        "programs": [
+            [
+                1763463600,
+                "Killer Siblings"
+            ],
+            [
+                1763466600,
+                "Wentworth"
+            ],
+            [
+                1763469600,
+                "Emmerdale"
+            ],
+            [
+                1763470800,
+                "Infomercial"
+            ],
+            [
+                1763472600,
+                "Infomercial"
+            ],
+            [
+                1763474400,
+                "Britannia"
+            ],
+            [
+                1763480100,
+                "Neighbours"
+            ],
+            [
+                1763481600,
+                "Infomercial"
+            ],
+            [
+                1763483400,
+                "Infomercial"
+            ],
+            [
+                1763485200,
+                "LES MILLS Born To Move"
+            ],
+            [
+                1763487000,
+                "Kiri and Lou"
+            ],
+            [
+                1763487300,
+                "Buzz's Epic Little Missions"
+            ],
+            [
+                1763488800,
+                "Miraculous: Tales of Ladybug and Cat Noir"
+            ],
+            [
+                1763490300,
+                "Megamind Rules!"
+            ],
+            [
+                1763491800,
+                "Brain Busters"
+            ],
+            [
+                1763493300,
+                "Love Monster"
+            ],
+            [
+                1763494200,
+                "Mecha Builders"
+            ],
+            [
+                1763495700,
+                "Infomercial"
+            ],
+            [
+                1763497500,
+                "Les Mills Adult Classes"
+            ],
+            [
+                1763499300,
+                "Big Brother Australia"
+            ]
+        ]
+    },
+    "mjh-tvnz-duke": {
+        "chno": 6,
+        "description": "Get game, laugh it up, watch real life, get hooked on a top drama or go big with a movie",
+        "epg_id": "mjh-tvnz-duke",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/tvnz-duke.png",
+        "mjh_master": "https://i.mjh.nz/.r/tvnz-duke.m3u8",
+        "name": "DUKE",
+        "network": "TVNZ",
+        "programs": [
+            [
+                1763461800,
+                "Magnum PI"
+            ],
+            [
+                1763465100,
+                "Defiance"
+            ],
+            [
+                1763467800,
+                "Grimm"
+            ],
+            [
+                1763470500,
+                "Duke - Back In The Future"
+            ],
+            [
+                1763485200,
+                "On Duke Today..."
+            ]
+        ]
+    },
+    "mjh-tvsn-shopping": {
+        "description": "It's your department store, right in the comfort of your own home",
+        "epg_id": "mjh-tvsn-shopping",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/tvsn-shopping.png",
+        "mjh_master": "https://i.mjh.nz/.r/tvsn-shopping.m3u8",
+        "name": "TVSN Shopping"
+    },
+    "mjh-wairarapa-tv": {
+        "chno": 41,
+        "description": "Promoting local tourism attractions, local content including amazing international and sporting events held in the Wairarapa Valley region",
+        "epg_id": "mjh-wairarapa-tv",
+        "headers": {
+            "referer": " ",
+            "seekable": "0",
+            "user-agent": "otg/1.5.1 (AppleTv Apple TV 4; tvOS16.0; appletv.client) libcurl/7.58.0 OpenSSL/1.0.2o zlib/1.2.11 clib/1.8.56"
+        },
+        "logo": "https://i.mjh.nz/.images/wairarapa-tv.png",
+        "mjh_master": "https://i.mjh.nz/.r/wairarapa-tv.m3u8",
+        "name": "Wairarapa TV",
+        "programs": [
+            [
+                1763463600,
+                "Space Updates"
+            ],
+            [
+                1763467200,
+                "Biographics"
+            ],
+            [
+                1763470800,
+                "Wairarapa Stuff"
+            ],
+            [
+                1763474400,
+                "Space Updates"
+            ],
+            [
+                1763478000,
+                "Economics Explained"
+            ],
+            [
+                1763481600,
+                "Wairarapa Stuff"
+            ],
+            [
+                1763485200,
+                "Biographics"
+            ],
+            [
+                1763488800,
+                "Space Updates"
+            ],
+            [
+                1763492400,
+                "Wairarapa Stuff"
+            ],
+            [
+                1763496000,
+                "History"
+            ],
+            [
+                1763499600,
+                "Arrow"
+            ]
+        ]
+    }
+}
